@@ -1,0 +1,11 @@
+export const HORMUZ_ADVISORY=Object.freeze({
+ id:'hormuz-2026-11-06',sourceDate:'2026-11-06',reviewedDate:'2026-11-07',routeId:'seaair',
+ carrierUrl:'https://www.maersk.com/stay-ahead',
+ imoUrl:'https://www.imo.org/en/mediacentre/pressbriefings/pages/imo-council-c138-urges-stronger-protection-of-seafarers-amid-threats-to-global-shipping-.aspx'
+});
+export function advisoryButton(icon,compact=false){
+ return `<button class="${compact?'route-advisory':'button outline corridor-advisory-button'}" data-action="corridor-advisory" aria-label="Hormuz corridor advisory, source update 6 November 2026">${icon('alert',compact?14:16)} ${compact?'Hormuz advisory':'Hormuz · 6 Nov'}</button>`;
+}
+export function advisoryDialog(icon){
+ return `<div class="dialog-content corridor-advisory-content"><div class="advisory-date">Source update · 6 Nov 2026 <span>Reviewed · 7 Nov 2026</span></div><h3>Confirm the Gulf connection before planning.</h3><p>Maersk’s 6 November update describes Gulf booking limits, congestion and conditional onward movement to Jebel Ali. IMO’s statement on the same date reports continuing incidents affecting commercial shipping.</p><div class="advisory-route-context">${icon('mixed',22)}<div><strong>Sea–air · Dubai</strong><span>The illustrated sea leg enters the Gulf through Hormuz before the Jebel Ali–DWC transfer.</span></div></div><h4>What this means for this plan</h4><p>Confirm service availability, routing and a revised quote with the carrier. The prototype’s cost and arrival figures remain illustrative; this notice does not assign a delay or surcharge.</p><div class="advisory-sources"><a href="${HORMUZ_ADVISORY.carrierUrl}" target="_blank" rel="noopener">Maersk operational update ${icon('external',14)}</a><a href="${HORMUZ_ADVISORY.imoUrl}" target="_blank" rel="noopener">IMO · 6 Nov statement ${icon('external',14)}</a></div><p class="advisory-review-note">This saved notice is reviewed manually. Open the sources for the latest conditions.</p></div><footer class="dialog-footer"><button class="button quiet" data-action="close">Close</button><button class="button primary" data-action="inspect-advisory-route">Inspect Dubai option ${icon('arrow',16)}</button></footer>`;
+}
