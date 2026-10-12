@@ -1,0 +1,610 @@
+/* Optical alignment and readable controls shared by workspace views. */
+.ui-icon {
+  flex: none;
+  vertical-align: middle;
+  overflow: visible;
+}
+.icon-button {
+  min-width: 32px;
+  min-height: 32px;
+  color: var(--text);
+  transition:
+    color 160ms,
+    background 160ms,
+    border-color 160ms;
+}
+.icon-button .ui-icon {
+  display: block;
+}
+.topbar .icon-button {
+  border-color: var(--line);
+}
+.baseline-pin {
+  opacity: 1;
+  color: var(--muted);
+}
+.baseline-pin.pinned {
+  color: var(--green-text);
+}
+.table-mode,
+.mode-tile,
+.shipment-icon {
+  color: var(--green-text);
+}
+.table-mode {
+  width: 32px;
+  height: 34px;
+  border-color: var(--line-strong);
+}
+.table-mode > svg {
+  width: 19px;
+  height: 19px;
+}
+.row-actions {
+  gap: 5px;
+}
+.row-actions .icon-button {
+  min-width: 30px;
+  min-height: 32px;
+}
+.row-actions .icon-button > svg {
+  width: 17px;
+  height: 17px;
+}
+.routes-table .row-arrow {
+  min-width: 78px;
+}
+.pill {
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 16px;
+  min-height: 27px;
+  padding: 4px 9px;
+}
+.pill-icon {
+  display: grid;
+  place-items: center;
+  width: 14px;
+  height: 16px;
+  flex: none;
+}
+.pill-label {
+  display: block;
+  line-height: 16px;
+}
+.pill .ui-icon {
+  display: block;
+  width: 14px;
+  height: 14px;
+}
+.routes-table .pill {
+  width: 130px;
+  min-height: 28px;
+  font-size: 10.5px;
+  padding: 5px 8px;
+  gap: 6px;
+}
+.routes-table td {
+  vertical-align: middle;
+}
+.routes-table th,
+.routes-table th button {
+  font-size: 11px;
+  font-weight: 450;
+}
+.routes-table th button {
+  min-height: 18px;
+  gap: 5px;
+}
+.route-name strong {
+  font-size: 12px;
+  line-height: 18px;
+}
+.route-name small {
+  font-size: 10px;
+  line-height: 15px;
+  min-height: 15px;
+  margin-top: 4px;
+}
+.routes-table td.numeric {
+  font-size: 13px;
+  font-weight: 480;
+}
+.routes-table td.numeric small {
+  font-size: 10px;
+  line-height: 15px;
+  margin-top: 4px;
+}
+.routes-table .unit {
+  font-size: 10px;
+}
+.routes-table tbody tr.selected-row td:first-child {
+  box-shadow: inset 3px 0 var(--green-text);
+}
+.routes-table tbody tr:focus-within {
+  background: var(--hover);
+}
+.routes-table tbody tr.selected-row:focus-within {
+  background: var(--green-bg);
+}
+.check-cell input {
+  appearance: none;
+  display: grid;
+  place-content: center;
+  width: 16px;
+  height: 16px;
+  border: 1px solid var(--muted);
+  border-radius: 4px;
+  background: var(--input);
+  transition:
+    background 150ms,
+    border-color 150ms;
+}
+.check-cell input:checked {
+  background: var(--green);
+  border-color: var(--green);
+}
+.check-cell input:checked::after {
+  content: "";
+  display: block;
+  width: 4px;
+  height: 7px;
+  border: solid white;
+  border-width: 0 1.5px 1.5px 0;
+  transform: translateY(-1px) rotate(45deg);
+}
+.search-box,
+.density-select {
+  height: 34px;
+}
+.search-box input,
+.density-select select {
+  font-size: 11px;
+}
+.search-box {
+  border-color: var(--line-strong);
+}
+.search-box > svg,
+.density-select > svg {
+  width: 15px;
+  height: 15px;
+  color: var(--text);
+}
+.filter-tabs button,
+.segmented button,
+.view-switch button {
+  font-size: 11px;
+}
+.filter-tabs {
+  gap: 20px;
+}
+.lab-presets button {
+  font-size: 10px;
+  padding: 5px 11px;
+}
+.lab-title strong {
+  font-size: 12px;
+}
+.viability,
+.planning-limits-summary {
+  font-size: 10px;
+}
+.table-caption {
+  font-size: 10px;
+  line-height: 16px;
+}
+.table-caption .ui-icon {
+  width: 14px;
+  height: 14px;
+}
+.table-tools > .icon-button {
+  border: 1px solid var(--line);
+}
+.panel-heading h2 {
+  font-size: 14px;
+}
+.route-summary > div > span {
+  font-size: 10px;
+}
+.route-summary > div > span .ui-icon {
+  color: var(--green-text);
+  width: 16px;
+  height: 16px;
+}
+.route-summary small,
+.route-summary small span {
+  font-size: 10px;
+  line-height: 16px;
+}
+.selected-route-title h3 {
+  font-size: 14px;
+}
+.selected-route-title p {
+  font-size: 11px;
+}
+.arrival-block > div > span,
+.arrival-block > span {
+  font-size: 10px;
+}
+.cost-breakdown > div {
+  font-size: 12px;
+  line-height: 18px;
+}
+.recommendation strong {
+  font-size: 11px;
+}
+.recommendation p {
+  font-size: 10px;
+  line-height: 17px;
+}
+.info-icon {
+  color: var(--text);
+  width: 24px;
+  height: 24px;
+}
+.info-icon .ui-icon {
+  width: 15px;
+  height: 15px;
+}
+.baseline-caption,
+.baseline-caption strong {
+  font-size: 11px;
+}
+.baseline-caption button {
+  font-size: 10px;
+}
+.comparison-table thead .pill,
+.route-detail .pill {
+  font-size: 10.5px;
+}
+.comparison-table .pill {
+  width: fit-content;
+}
+.matrix-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 16px;
+}
+.saved-footer > span,
+.saved-footer .text-button {
+  font-size: 10px;
+}
+.saved-card-top > .pill {
+  font-size: 10px;
+}
+.map-stage > .route-map {
+  outline: none;
+}
+.map-stage > .route-map:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: -3px;
+}
+.map-stage .map-zoom {
+  transition: none;
+}
+.route-map[data-zoomed="true"] {
+  cursor: grab;
+}
+.route-map.is-dragging,
+.route-map.is-dragging * {
+  cursor: grabbing;
+  user-select: none;
+}
+.route-map .selected-path,
+.route-map .baseline-path,
+.route-map .other-route {
+  vector-effect: non-scaling-stroke;
+}
+.map-controls {
+  bottom: 22px;
+  right: 16px;
+  align-items: center;
+  flex-direction: row;
+  padding: 3px;
+  gap: 1px;
+  border-radius: 7px;
+  box-shadow: 0 3px 12px #10221812;
+}
+.map-controls button {
+  width: 30px;
+  height: 30px;
+  border: 0;
+  color: var(--text);
+  border-radius: 4px;
+}
+.map-controls button + button {
+  border: 0;
+}
+.map-controls button:focus-visible {
+  outline-offset: -2px;
+}
+.map-controls button:disabled {
+  opacity: 0.35;
+}
+.map-controls output {
+  width: 42px;
+  text-align: center;
+  color: var(--text);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+.map-controls .map-fit {
+  width: auto;
+  padding: 0 9px;
+  gap: 6px;
+  border-left: 1px solid var(--line-strong);
+  border-radius: 0 4px 4px 0;
+  margin-left: 3px;
+  font-size: 11px;
+}
+.map-navigation-help {
+  position: absolute;
+  z-index: 2;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  pointer-events: none;
+  font-size: 10px;
+  line-height: 16px;
+  color: var(--text);
+  padding: 5px 8px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--panel) 94%, transparent);
+  opacity: 0;
+  transition: opacity 150ms;
+}
+.map-stage:hover .map-navigation-help,
+.map-stage:focus-within .map-navigation-help {
+  opacity: 1;
+}
+.map-key {
+  bottom: 22px;
+  min-height: 38px;
+  font-size: 10px;
+  color: var(--text);
+}
+.map-attribution {
+  font-size: 9px;
+  right: 16px;
+  bottom: 4px;
+  color: var(--muted);
+}
+.port-label text {
+  font-size: 12px;
+}
+.port-label .port-label-code {
+  font-size: 9px;
+}
+.port-label-card {
+  transform: scale(var(--map-label-scale, 1));
+  transform-origin: 0 0;
+}
+.map-stage .waypoint {
+  font-size: calc(11px * var(--map-label-scale, 1));
+  paint-order: stroke;
+  stroke: var(--map-water);
+  stroke-width: 3px;
+  stroke-linejoin: round;
+}
+.map-labels text {
+  letter-spacing: 1.4px;
+}
+[data-theme="dark"] .land-layer {
+  opacity: 0.65;
+  filter: brightness(0.6) sepia(0.35) saturate(0.75) hue-rotate(35deg);
+}
+.guide-tip {
+  font-size: 11px;
+  line-height: 18px;
+}
+.case-section > div {
+  min-width: 0;
+}
+.case-journey-preview {
+  max-width: 100%;
+}
+.arrival-route-label {
+  font-size: 18px;
+}
+.arrival-grid text,
+.arrival-deadline-label,
+.arrival-day-label {
+  font-size: 17px;
+}
+@media (max-width: 1250px) {
+  .lab-top {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .lab-presets button {
+    padding-inline: 9px;
+  }
+  .route-summary small span {
+    display: block;
+  }
+  .table-toolbar {
+    flex-wrap: wrap;
+    gap: 0;
+  }
+  .filter-tabs {
+    min-height: 48px;
+  }
+  .table-tools {
+    padding: 10px 0;
+  }
+  .routes-table .route-name {
+    min-width: 220px;
+  }
+  .route-summary strong {
+    font-size: 25px;
+  }
+}
+@media (max-width: 850px) {
+  .map-key {
+    font-size: 9px;
+  }
+  .lab-top {
+    gap: 12px;
+  }
+  .lab-title strong {
+    font-size: 11px;
+  }
+  .lab-presets button {
+    font-size: 10px;
+  }
+  .baseline-caption {
+    max-width: 285px;
+  }
+}
+@media (max-width: 700px) {
+  .case-journey-preview .arrival-comparison {
+    min-width: 640px;
+  }
+  .map-panel > .panel-heading {
+    flex-wrap: wrap;
+    height: auto;
+    padding: 13px;
+  }
+  .map-panel > .panel-heading .map-actions {
+    display: contents;
+  }
+  .map-panel > .panel-heading .map-actions > .icon-button {
+    margin-left: auto;
+  }
+  .map-panel > .panel-heading .view-switch {
+    order: 1;
+    width: 100%;
+  }
+  .map-panel > .panel-heading .view-switch button {
+    flex: 1;
+    white-space: nowrap;
+  }
+  .view-switch button {
+    font-size: 10px;
+    padding: 5px 7px;
+  }
+  .map-actions {
+    gap: 7px;
+  }
+  .panel-heading {
+    gap: 10px;
+  }
+  .panel-heading h2 {
+    font-size: 12px;
+  }
+  .map-stage:has(> .route-map) .map-key {
+    top: 14px;
+    left: auto;
+    right: 14px;
+    bottom: auto;
+    min-height: 31px;
+    font-size: 9px;
+  }
+  .map-navigation-help {
+    display: none;
+  }
+  .map-controls {
+    bottom: 24px;
+    right: 14px;
+  }
+  .map-attribution {
+    font-size: 8px;
+    right: 14px;
+    bottom: 6px;
+  }
+  .route-summary {
+    gap: 9px;
+    padding: 18px 13px;
+  }
+  .route-summary strong {
+    font-size: 23px;
+  }
+  .route-summary > div > span {
+    font-size: 9px;
+  }
+  .route-summary > div > span .ui-icon {
+    display: none;
+  }
+  .route-summary > div + div {
+    padding-left: 10px;
+  }
+  .route-summary small,
+  .route-summary small span {
+    font-size: 9px;
+  }
+  .route-summary em {
+    font-size: 10px;
+  }
+  .lab-presets button {
+    font-size: 9px;
+    padding: 5px 6px;
+  }
+  .viability,
+  .planning-limits-summary {
+    font-size: 9px;
+  }
+  .segmented button {
+    font-size: 10px;
+    padding: 6px;
+  }
+  .table-tools {
+    gap: 8px;
+  }
+  .search-box {
+    width: auto;
+    flex: 1;
+  }
+  .density-select {
+    max-width: 120px;
+  }
+  .table-caption {
+    font-size: 9px;
+  }
+  .baseline-caption,
+  .baseline-caption strong {
+    font-size: 10px;
+  }
+  .baseline-caption {
+    max-width: 215px;
+  }
+  .baseline-caption button {
+    font-size: 9px;
+  }
+  .comparison-table .pill {
+    font-size: 10px;
+  }
+  .detail-panel .route-detail > .pill {
+    font-size: 10.5px;
+    min-height: 27px;
+    float: none;
+    margin: 0 0 3px;
+  }
+  .map-stage .map-labels {
+    display: none;
+  }
+  .map-stage .port-origin .port-label-card {
+    transform: translateY(calc(70px * var(--map-label-scale, 1)))
+      scale(var(--map-label-scale, 1));
+  }
+}
+@media (max-width: 400px) {
+  .route-summary strong {
+    font-size: 20px;
+  }
+  .route-summary em {
+    font-size: 9px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .map-navigation-help,
+  .icon-button,
+  .check-cell input {
+    transition: none;
+  }
+}
