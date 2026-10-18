@@ -1,0 +1,448 @@
+/* Scenario planning tools share the existing theme tokens. */
+.scenario-lab {
+  margin: 0 0 20px;
+  background: color-mix(in srgb, var(--panel) 74%, var(--sidebar));
+  border-color: var(--line-strong);
+}
+.lab-top {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  min-height: 56px;
+  padding: 10px 15px 10px 18px;
+}
+.lab-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text);
+  white-space: nowrap;
+}
+.lab-title > svg {
+  color: var(--green-text);
+}
+.lab-title strong {
+  font-size: 11px;
+  font-weight: 550;
+  letter-spacing: -0.15px;
+}
+.lab-presets {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  padding: 3px;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  border-radius: 5px;
+}
+.lab-presets button {
+  font-size: 9px;
+  line-height: 16px;
+  padding: 5px 10px;
+  border-radius: 3px;
+  color: var(--muted);
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+.lab-presets button:hover {
+  color: var(--text);
+}
+.lab-presets button[aria-pressed="true"] {
+  background: var(--panel);
+  color: var(--text);
+  border-color: var(--line-strong);
+  box-shadow: 0 1px 2px #253b2605;
+}
+.viability {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--muted);
+  white-space: nowrap;
+  font-size: 9px;
+}
+.viability strong {
+  color: var(--text);
+  font-weight: 550;
+}
+.viability-bars {
+  display: flex;
+  gap: 3px;
+}
+.viability-bars i {
+  display: block;
+  width: 4px;
+  height: 12px;
+  border-radius: 2px;
+  background: var(--line-strong);
+  transition: background 0.2s;
+}
+.viability-bars .viable {
+  background: #6b9671;
+}
+.lab-adjust {
+  border: 1px solid var(--line);
+  background: var(--panel);
+  min-width: 27px;
+  height: 27px;
+  margin-left: -7px;
+}
+.lab-controls {
+  border-top: 1px solid var(--line);
+  padding: 19px 20px 16px;
+  background: var(--panel);
+  display: grid;
+  grid-template-columns: minmax(220px, 0.8fr) minmax(0, 1fr);
+  align-items: center;
+  gap: 30px;
+  animation: lab-enter 0.22s ease-out;
+}
+.lab-controls .assumptions-compact {
+  width: 100%;
+  gap: 25px;
+}
+.lab-controls .assumptions-compact > span {
+  display: none;
+}
+.lab-controls .assumptions-compact label {
+  flex: 1;
+  min-width: 0;
+  max-width: 220px;
+  font-size: 10px;
+  row-gap: 10px;
+}
+.lab-controls .assumptions-compact input {
+  height: 4px;
+}
+.lab-controls .assumptions-compact output {
+  font-size: 10px;
+}
+.lab-insight {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 10px;
+  color: var(--muted);
+  border-left: 1px solid var(--line);
+  padding-left: 22px;
+  line-height: 1.7;
+}
+.lab-insight > span {
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+.lab-insight p {
+  flex: 1;
+  min-width: 120px;
+  font-size: 10px;
+  line-height: 1.75;
+}
+.lab-insight p strong {
+  font-weight: 500;
+  color: var(--text);
+}
+.lab-insight .text-button {
+  width: 100%;
+  font-size: 9px;
+  margin-left: 22px;
+  justify-content: flex-start;
+  padding: 0;
+}
+.planning-limits-summary {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  font-size: 9px;
+  color: var(--muted);
+}
+.planning-limits-summary > span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+.baseline-caption {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+.baseline-caption strong {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--text);
+}
+.baseline-caption button {
+  padding: 0 0 0 8px;
+  color: var(--green-text);
+  font-size: 9px;
+  border-left: 1px solid var(--line-strong);
+  margin-left: 5px;
+  line-height: 13px;
+}
+.row-actions {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  justify-content: flex-end;
+}
+.baseline-pin {
+  opacity: 0.5;
+  min-width: 23px;
+  padding: 4px !important;
+}
+.baseline-pin:hover,
+.baseline-pin:focus-visible,
+.baseline-pin.pinned {
+  opacity: 1;
+  color: var(--green-text);
+  background: var(--green-bg);
+}
+.routes-table .row-arrow {
+  min-width: 59px;
+}
+.map-stage > .motion-ghost {
+  z-index: 1;
+  pointer-events: none;
+  user-select: none;
+}
+.map-stage > .map-key,
+.map-stage > .map-controls,
+.map-stage > .map-attribution {
+  z-index: 2;
+}
+.motion-notes {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+  border-top: 1px solid var(--line);
+  padding-top: 25px;
+  margin-top: 27px;
+}
+.motion-notes > span {
+  font-size: 10px;
+  color: var(--muted);
+}
+.motion-notes strong {
+  display: block;
+  font-size: 25px;
+  color: var(--text);
+  font-weight: 480;
+  letter-spacing: -0.8px;
+  margin-bottom: 10px;
+}
+@keyframes lab-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (max-width: 1250px) {
+  .lab-top {
+    gap: 14px;
+    padding-left: 15px;
+  }
+  .lab-presets button {
+    font-size: 8px;
+    padding: 5px 8px;
+  }
+  .lab-title strong {
+    font-size: 10px;
+  }
+  .viability {
+    font-size: 8px;
+    gap: 7px;
+  }
+  .viability-bars {
+    gap: 2px;
+  }
+  .viability-bars i {
+    width: 3px;
+  }
+  .planning-limits-summary {
+    gap: 12px;
+    font-size: 8px;
+  }
+  .lab-controls {
+    gap: 20px;
+  }
+  .lab-insight {
+    padding-left: 18px;
+  }
+}
+@media (max-width: 850px) {
+  .lab-top {
+    gap: 13px;
+    flex-wrap: wrap;
+    padding: 13px 15px;
+  }
+  .lab-presets {
+    order: 3;
+    width: 100%;
+    justify-content: space-between;
+  }
+  .lab-presets button {
+    flex: 1;
+    font-size: 9px;
+  }
+  .viability {
+    margin-left: auto;
+  }
+  .lab-adjust {
+    margin-left: 0;
+  }
+  .lab-title strong {
+    font-size: 11px;
+  }
+  .lab-controls {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .lab-controls .assumptions-compact label {
+    max-width: none;
+  }
+  .lab-insight {
+    border-left: 0;
+    border-top: 1px solid var(--line);
+    padding: 15px 0 0;
+  }
+  .lab-insight .text-button {
+    width: auto;
+    margin-left: auto;
+    font-size: 9px;
+  }
+  .planning-limits-summary {
+    font-size: 9px;
+    gap: 15px;
+  }
+  .scenario-controls {
+    gap: 15px;
+  }
+  .baseline-caption {
+    max-width: 310px;
+  }
+}
+@media (max-width: 700px) {
+  .scenario-lab {
+    margin-bottom: 16px;
+  }
+  .lab-top {
+    padding: 12px 13px;
+    gap: 12px;
+  }
+  .lab-title strong {
+    font-size: 10px;
+  }
+  .lab-title {
+    gap: 6px;
+  }
+  .lab-title > svg {
+    width: 14px;
+    height: 14px;
+  }
+  .viability {
+    font-size: 8px;
+    gap: 6px;
+  }
+  .viability-bars i {
+    height: 10px;
+  }
+  .lab-adjust {
+    min-width: 24px;
+    width: 24px;
+    height: 24px;
+    padding: 3px;
+  }
+  .lab-presets {
+    gap: 1px;
+    padding: 2px;
+  }
+  .lab-presets button {
+    padding: 5px 6px;
+    font-size: 8px;
+  }
+  .lab-controls {
+    padding: 18px 14px 16px;
+    gap: 18px;
+  }
+  .lab-controls .assumptions-compact {
+    gap: 22px;
+  }
+  .lab-controls .assumptions-compact label {
+    font-size: 10px;
+  }
+  .lab-insight p {
+    font-size: 9px;
+  }
+  .lab-insight .text-button {
+    font-size: 8px;
+  }
+  .planning-limits-summary {
+    width: 100%;
+    justify-content: space-between;
+    padding: 0 2px 4px;
+    gap: 10px;
+    font-size: 8px;
+  }
+  .planning-limits-summary > span > svg {
+    width: 11px;
+    height: 11px;
+  }
+  .baseline-caption {
+    font-size: 9px !important;
+    max-width: 215px;
+    line-height: 1.8 !important;
+  }
+  .baseline-caption strong {
+    font-size: 9px;
+  }
+  .baseline-caption button {
+    font-size: 8px;
+  }
+  .row-actions {
+    gap: 6px;
+  }
+  .routes-table .row-arrow {
+    min-width: 70px;
+  }
+  .row-actions .icon-button {
+    min-width: 27px;
+    min-height: 31px;
+  }
+  .motion-notes {
+    gap: 15px;
+  }
+  .motion-notes > span {
+    font-size: 8px;
+  }
+  .motion-notes strong {
+    font-size: 23px;
+  }
+  .scenario-controls .segmented {
+    margin-bottom: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lab-controls {
+    animation: none;
+  }
+  .viability-bars i {
+    transition: none;
+  }
+  .motion-ghost {
+    display: none;
+  }
+}
+
+.chart-reference {
+  fill: none;
+  stroke: #ac8450;
+  stroke-width: 1.5;
+  stroke-dasharray: 3 3;
+}
