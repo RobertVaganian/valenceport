@@ -1,0 +1,7 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {DEFAULTS} from '../dist/model.mjs';
+import {tradeoffModel,plotLabels} from '../dist/analysis-model.mjs';
+test('planning range makes near-budget alternatives readable without hiding the existence of outliers',()=>{const focus=tradeoffModel({...DEFAULTS,fuel:35,delay:12,selected:'air'});assert.equal(focus.shown.length,4);assert.equal(focus.hidden,2);assert.equal(focus.selectedOutside,true);assert.ok(focus.cap<60000);const all=tradeoffModel(DEFAULTS,'all');assert.equal(all.points.length,6);assert.equal(all.hidden,0);assert.ok(all.cap>all.routes.find(r=>r.id==='air').cost);});
+test('chart marks and labels stay finite and within the plotting area across supported assumptions',()=>{for(const range of ['focus','all'])for(const fuel of [0,35,40])for(const delay of [0,12,14]){const model=tradeoffModel({...DEFAULTS,fuel,delay},range);for(const point of model.points){assert.ok(point.x>=76&&point.x<=680);assert.ok(point.y>=48&&point.y<=258);}for(const label of plotLabels(model.points,'suez')){assert.ok(Number.isFinite(label.x)&&Number.isFinite(label.y));assert.ok(label.x>=76&&label.x+label.w<=680);assert.ok(label.y>=35&&label.y+label.h<=265);}}});
+test('bubble areas remain proportional to the underlying emissions',()=>{const points=tradeoffModel(DEFAULTS,'all').points;for(const point of points)assert.ok(Math.abs(point.radius**2/point.co2-1.44)<1e-8);});
