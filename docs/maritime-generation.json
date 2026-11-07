@@ -1,0 +1,48 @@
+{
+  "suez": {
+    "generator": "searoute 1.6.0",
+    "restrictions": [
+      "northwest",
+      "panama",
+      "sunda"
+    ],
+    "passages": [
+      "babalmandab",
+      "suez",
+      "gibraltar",
+      "malacca"
+    ],
+    "seaKm": 19511,
+    "points": 158
+  },
+  "cape": {
+    "generator": "searoute 1.6.0",
+    "restrictions": [
+      "northwest",
+      "panama",
+      "suez",
+      "sunda"
+    ],
+    "passages": [
+      "south_africa",
+      "malacca"
+    ],
+    "seaKm": 25986,
+    "points": 135
+  },
+  "seaair": {
+    "generator": "searoute 1.6.0",
+    "restrictions": [
+      "northwest",
+      "panama",
+      "suez",
+      "sunda"
+    ],
+    "passages": [
+      "ormuz",
+      "malacca"
+    ],
+    "seaKm": 10536,
+    "points": 76
+  }
+}

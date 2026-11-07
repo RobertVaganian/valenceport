@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" role="img" aria-labelledby="title">
+  <title id="title">ValencePort — connected paths</title>
+  <style>.still{display:none}@media(prefers-reduced-motion:reduce){.motion{display:none}.still{display:inline}}</style>
+  <rect width="40" height="40" rx="10" fill="#435f56"/>
+  <g class="still">
+    <path d="M9 12l9 17h4l9-17M13 12l7 13 7-13" fill="none" stroke="#fafbf5" stroke-width="2.5" stroke-linejoin="round"/>
+    <path d="M15 20h10" stroke="#c2d0b4" stroke-width="2"/>
+  </g>
+  <g class="motion">
+    <path d="M9 12l9 17h4l9-17M13 12l7 13 7-13" fill="none" stroke="#71897e" stroke-width="2.5" stroke-linejoin="round"/>
+    <path d="M9 12l9 17h4l9-17" fill="none" stroke="#fafbf5" stroke-width="2.5" stroke-linejoin="round" stroke-dasharray="42.470768 43.470768" stroke-dashoffset="42.470768">
+      <animate attributeName="stroke-dashoffset" values="42.470768;42.470768;0;0;42.470768" keyTimes="0;.025;.2125;.885417;1" dur="4.8s" repeatCount="indefinite" calcMode="spline" keySplines="0 0 1 1;.4 0 .6 1;0 0 1 1;.4 0 .6 1"/>
+    </path>
+    <path d="M13 12l7 13 7-13" fill="none" stroke="#fafbf5" stroke-width="2.5" stroke-linejoin="round" stroke-dasharray="29.529646 30.529646" stroke-dashoffset="29.529646">
+      <animate attributeName="stroke-dashoffset" values="29.529646;29.529646;0;0;29.529646" keyTimes="0;.083333;.25;.885417;1" dur="4.8s" repeatCount="indefinite" calcMode="spline" keySplines="0 0 1 1;.4 0 .6 1;0 0 1 1;.4 0 .6 1"/>
+    </path>
+    <path d="M15 20h10" fill="none" stroke="#c2d0b4" stroke-width="2" stroke-dasharray="10 11" stroke-dashoffset="10">
+      <animate attributeName="stroke-dashoffset" values="10;10;0;0;10" keyTimes="0;.177083;.264583;.885417;1" dur="4.8s" repeatCount="indefinite" calcMode="spline" keySplines="0 0 1 1;.4 0 .6 1;0 0 1 1;.4 0 .6 1"/>
+    </path>
+  </g>
+</svg>
