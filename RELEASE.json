@@ -1,0 +1,8 @@
+{
+  "name": "ValencePort",
+  "version": "1.9.0",
+  "source_commit": "ff90b30037fcc5c5a5df2d982894bd10a5aed71c",
+  "date": "2026-11-07",
+  "run": "npm run dev",
+  "verify": "npm run check"
+}
