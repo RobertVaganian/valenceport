@@ -18,7 +18,7 @@
   [![Runtime dependencies](https://img.shields.io/badge/runtime_dependencies-0-435f56?style=flat)](package.json)
   [![Tests](https://img.shields.io/badge/behavior_tests-80-435f56?style=flat)](tests/)
 
-  [Explore the workspace](#the-workspace) ·
+  [Explore the workspace](https://robertvaganian.github.io/valenceport/) ·
   [Run locally](#run-locally) ·
   [Design decisions](#design-decisions)
 
