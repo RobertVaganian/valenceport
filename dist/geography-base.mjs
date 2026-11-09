@@ -1,10 +1,11 @@
 // Keep one persistent vector definition outside rerendered views. External SVG
 // <use> documents can be dropped by Chromium when their last instance is removed.
 let loaded;
-let prefix='/assets/geography.svg#';
+const geographyUrl = new URL('./assets/geography.svg', import.meta.url);
+let prefix=geographyUrl.href+'#';
 export const geographyHref=id=>prefix+id;
 export function loadGeography(){
- return loaded??=fetch('/assets/geography.svg').then(response=>{
+ return loaded??=fetch(geographyUrl).then(response=>{
   if(!response.ok)throw new Error('Geography HTTP '+response.status);
   return response.text();
  }).then(markup=>{

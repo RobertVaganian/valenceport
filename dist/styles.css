@@ -3245,7 +3245,7 @@ textarea::placeholder {
   }
   .topbar:before {
     content: "";
-    background: url("/assets/mark.svg") no-repeat center/27px;
+    background: url("./assets/mark.svg") no-repeat center/27px;
     width: 27px;
     height: 27px;
     margin-right: 8px;

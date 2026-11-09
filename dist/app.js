@@ -1,3 +1,4 @@
+import { appUrl, appPath } from './paths.mjs';
 import {advisoryDialog} from './corridor-advisory.mjs';
 import {planningLimitsForm,createPlanningControls} from './planning-controls.mjs';
 import {createTourPlayback} from './tour-playback.mjs';
@@ -131,7 +132,7 @@ let navigationHidden=read("vp-navigation-hidden",false),mapDetails=true;
 let settings = validateSettings(read("vp-settings", DEFAULTS));
 let saved = normaliseScenarios(read("vp-decisions", []));
 let collectionQuery = "", starredOnly = false, recentlyDeleted = null, pendingImport = null, chartRange = "focus";
-let view = location.pathname.startsWith("/case-study") ? "case" : location.hash==="#saved"?"saved":location.hash==="#history"?"history":"planner";
+let view = appPath(location.pathname) === "/case-study" ? "case" : location.hash==="#saved"?"saved":location.hash==="#history"?"history":"planner";
 settings.mode="all";settings.query="";
 let compare = new Set();
 let renderedContext = null, preserveScenarioInputs = false, scenarioRenderTimer = null, costDetailsOpen = false, comparisonIds = [];
@@ -221,10 +222,10 @@ function formatTime(s) {
     minute: "2-digit",
   }).format(new Date(s));
 }
-const mark = `<img src="/assets/mark.svg" alt="" width="32" height="32">`;
+const mark = `<img src="${appUrl('assets/mark.svg')}" alt="" width="32" height="32">`;
 function shell() {
   $("#app").innerHTML =
-    `<aside class="sidebar" id="workspace-navigation"><a href="/" class="brand" aria-label="ValencePort home">${mark}<span>Valence<span class="brand-port">Port</span></span></a><div class="workspace-label">NORTHSTAR INDUSTRIAL ${icon("down", 12)}</div><div class="workspace-identity"><span class="workspace-avatar">N</span><span>Planning workspace<small>Europe operations</small></span></div><div class="nav-label">WORKSPACE</div><nav aria-label="Workspace"><button data-action="nav" data-view="planner" title="Route planner">${icon("route")}<span>Route planner</span></button><button data-action="nav" data-view="saved" title="Saved scenarios">${icon("folder")}<span>Saved scenarios</span><b id="saved-count">${saved.length}</b></button><button data-action="nav" data-view="history" title="Decision log">${icon("history")}<span>Decision log</span></button></nav><div class="sidebar-note"><span class="live-dot"></span> Demo workspace<small>Make a plan. Explore the trade-offs.</small></div><div class="sidebar-bottom"><a href="/case-study" data-action="nav" data-view="case" title="Inside the design">${icon("document")}<span>Inside the design</span>${icon("external", 13)}</a><button class="guide-launch" data-action="guide" title="Animated walkthrough"><span class="guide-play">${icon("play",13)}</span><span>Quick tour</span><small>5 steps</small></button></div></aside><div class="app-body"><header class="topbar"><div class="topbar-start"><button class="icon-button navigation-toggle" data-action="toggle-navigation" aria-controls="workspace-navigation" aria-expanded="${!navigationHidden}" aria-label="${navigationHidden?'Show navigation':'Hide navigation'}" title="${navigationHidden?'Show navigation':'Hide navigation'}">${icon("panel",18)}</button><div class="breadcrumb"><span>Workspace</span><span class="breadcrumb-divider">/</span><strong id="breadcrumb-current">Route planner</strong></div></div><div class="topbar-right"><span class="saved-local">${icon("check", 12)} ${storageAvailable ? "Saved locally" : "Session only"}</span><button class="icon-button" data-action="theme" aria-label="Switch colour theme">${icon(theme === "dark" ? "sun" : "moon", 17)}</button><button class="avatar small profile-trigger" data-action="profile" aria-label="Open profile" aria-expanded="false" aria-controls="profile-menu" aria-haspopup="menu" title="Profile & workspace">RV</button></div></header><main id="main" tabindex="-1"></main></div>`;
+    `<aside class="sidebar" id="workspace-navigation"><a href="${appUrl()}" class="brand" aria-label="ValencePort home">${mark}<span>Valence<span class="brand-port">Port</span></span></a><div class="workspace-label">NORTHSTAR INDUSTRIAL ${icon("down", 12)}</div><div class="workspace-identity"><span class="workspace-avatar">N</span><span>Planning workspace<small>Europe operations</small></span></div><div class="nav-label">WORKSPACE</div><nav aria-label="Workspace"><button data-action="nav" data-view="planner" title="Route planner">${icon("route")}<span>Route planner</span></button><button data-action="nav" data-view="saved" title="Saved scenarios">${icon("folder")}<span>Saved scenarios</span><b id="saved-count">${saved.length}</b></button><button data-action="nav" data-view="history" title="Decision log">${icon("history")}<span>Decision log</span></button></nav><div class="sidebar-note"><span class="live-dot"></span> Demo workspace<small>Make a plan. Explore the trade-offs.</small></div><div class="sidebar-bottom"><a href="${appUrl('case-study/')}" data-action="nav" data-view="case" title="Inside the design">${icon("document")}<span>Inside the design</span>${icon("external", 13)}</a><button class="guide-launch" data-action="guide" title="Animated walkthrough"><span class="guide-play">${icon("play",13)}</span><span>Quick tour</span><small>5 steps</small></button></div></aside><div class="app-body"><header class="topbar"><div class="topbar-start"><button class="icon-button navigation-toggle" data-action="toggle-navigation" aria-controls="workspace-navigation" aria-expanded="${!navigationHidden}" aria-label="${navigationHidden?'Show navigation':'Hide navigation'}" title="${navigationHidden?'Show navigation':'Hide navigation'}">${icon("panel",18)}</button><div class="breadcrumb"><span>Workspace</span><span class="breadcrumb-divider">/</span><strong id="breadcrumb-current">Route planner</strong></div></div><div class="topbar-right"><span class="saved-local">${icon("check", 12)} ${storageAvailable ? "Saved locally" : "Session only"}</span><button class="icon-button" data-action="theme" aria-label="Switch colour theme">${icon(theme === "dark" ? "sun" : "moon", 17)}</button><button class="avatar small profile-trigger" data-action="profile" aria-label="Open profile" aria-expanded="false" aria-controls="profile-menu" aria-haspopup="menu" title="Profile & workspace">RV</button></div></header><main id="main" tabindex="-1"></main></div>`;
   syncNavigation();
   render();
 }
@@ -382,7 +383,7 @@ function corridorDetails(){
  const r=selected();
  const descriptions={suez:'Yangshan → Singapore → Malacca → Bab-el-Mandeb → Suez → Gibraltar → Rotterdam',cape:'Yangshan → Singapore → Malacca → Cape of Good Hope → Rotterdam',eco:'Yangshan → Singapore → Suez → Rotterdam',rail:'Shanghai → Xi’an → Lanzhou → Urumqi → Khorgos → Kazakhstan → Kuryk → Alat → Tbilisi → Kars → Istanbul → Europe → Rotterdam',seaair:'Yangshan → Singapore → Jebel Ali → road to Dubai World Central (DWC) → Amsterdam → road to Rotterdam',air:'Shanghai Pudong (PVG) → Amsterdam Schiphol (AMS) → road to Rotterdam'};
  const rail=r.mode==='rail',air=r.mode==='air',mixed=r.mode==='multimodal';
- showDialog('Map sources & credits',`<div class="dialog-content methodology"><span class="overline">${esc(r.name)}</span><h3>Move around</h3><p>Scroll over the map to zoom around your pointer. Drag the enlarged map to move. Use + / − or Fit at the lower right; Expand opens a wider view. Keyboard: focus the map, then + / − to zoom, arrows to move, and 0 to fit.</p><h3>Read the route</h3><p>${descriptions[r.id]}</p><p>Solid: selected network route. Dashed: comparison route, air connection or ferry link. A dashed air arc shows connected airports; it does not claim a flown track.</p><h3>How precise is the line?</h3><p>${rail?'The two rail sections follow OpenStreetMap railway geometry via OpenRailRouting, acquired 6 November 2026. Kuryk–Alat is a separate indicative Caspian ferry link. Tracks are geographically routed candidates; freight permissions, gauge transfers and operating availability require operator confirmation.':air?'The PVG–AMS arc is a great-circle connection. The road delivery follows the OSRM road network.':mixed?'Sea legs follow the SeaRoute network. Jebel Ali–DWC and Amsterdam–Rotterdam follow the OSRM road network. The DWC–AMS arc is a great-circle connection; no verified flight trace is available.':'Sea legs follow the SeaRoute maritime network and SMDG terminal coordinates; Cape routing excludes Suez.'}</p>${air||mixed?'<p>Road geometry uses the driving profile, not certified truck clearance. Short dotted access connectors cover terminal snaps of up to 504 m; private terminal access is unverified.</p>':''}${air?`<h3>A recorded example, with gaps</h3><p>KL896 · PH-BKG · 4 Nov 2026. ADSB.lol provides 2,901 observations in eight separate segments. Shanghai departure is missing and the largest gap is 6 h 31 min. Only observed segments are drawn, without joining gaps. This historical passenger flight illustrates coverage; it is not the planned cargo service.</p><button class="button outline" data-action="recorded-flight">${icon('plane',16)} ${showRecorded?'Hide':'Show'} recorded segments</button>`:''}<h3>Sources & credits</h3><p>Base geography: Natural Earth 1:10m, public domain. Network data © OpenStreetMap contributors, ODbL 1.0. Observations © ADSB.lol contributors, ODbL 1.0. The map does not confirm a booking, navigational clearance, price or transit time.</p><div class="map-source-links"><a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap attribution ${icon('external',12)}</a><a href="https://routing.openrailrouting.org/" target="_blank" rel="noopener">OpenRailRouting ${icon('external',12)}</a><a href="https://project-osrm.org/" target="_blank" rel="noopener">OSRM road routing ${icon('external',12)}</a><a href="https://www.adsb.lol/docs/open-data/historical" target="_blank" rel="noopener">ADSB.lol historical data ${icon('external',12)}</a><a href="https://github.com/genthalili/searoute-py" target="_blank" rel="noopener">SeaRoute ${icon('external',12)}</a><a href="https://github.com/smdg-org/Terminal-Code-List" target="_blank" rel="noopener">SMDG terminals ${icon('external',12)}</a><a href="https://www.naturalearthdata.com/" target="_blank" rel="noopener">Natural Earth ${icon('external',12)}</a><a href="/assets/tracks/README.md" target="_blank" rel="noopener">Acquisition notes & limitations ${icon('external',12)}</a></div></div><footer class="dialog-footer"><button class="button primary" data-action="close">Back to map ${icon('arrow',15)}</button></footer>`);
+ showDialog('Map sources & credits',`<div class="dialog-content methodology"><span class="overline">${esc(r.name)}</span><h3>Move around</h3><p>Scroll over the map to zoom around your pointer. Drag the enlarged map to move. Use + / − or Fit at the lower right; Expand opens a wider view. Keyboard: focus the map, then + / − to zoom, arrows to move, and 0 to fit.</p><h3>Read the route</h3><p>${descriptions[r.id]}</p><p>Solid: selected network route. Dashed: comparison route, air connection or ferry link. A dashed air arc shows connected airports; it does not claim a flown track.</p><h3>How precise is the line?</h3><p>${rail?'The two rail sections follow OpenStreetMap railway geometry via OpenRailRouting, acquired 6 November 2026. Kuryk–Alat is a separate indicative Caspian ferry link. Tracks are geographically routed candidates; freight permissions, gauge transfers and operating availability require operator confirmation.':air?'The PVG–AMS arc is a great-circle connection. The road delivery follows the OSRM road network.':mixed?'Sea legs follow the SeaRoute network. Jebel Ali–DWC and Amsterdam–Rotterdam follow the OSRM road network. The DWC–AMS arc is a great-circle connection; no verified flight trace is available.':'Sea legs follow the SeaRoute maritime network and SMDG terminal coordinates; Cape routing excludes Suez.'}</p>${air||mixed?'<p>Road geometry uses the driving profile, not certified truck clearance. Short dotted access connectors cover terminal snaps of up to 504 m; private terminal access is unverified.</p>':''}${air?`<h3>A recorded example, with gaps</h3><p>KL896 · PH-BKG · 4 Nov 2026. ADSB.lol provides 2,901 observations in eight separate segments. Shanghai departure is missing and the largest gap is 6 h 31 min. Only observed segments are drawn, without joining gaps. This historical passenger flight illustrates coverage; it is not the planned cargo service.</p><button class="button outline" data-action="recorded-flight">${icon('plane',16)} ${showRecorded?'Hide':'Show'} recorded segments</button>`:''}<h3>Sources & credits</h3><p>Base geography: Natural Earth 1:10m, public domain. Network data © OpenStreetMap contributors, ODbL 1.0. Observations © ADSB.lol contributors, ODbL 1.0. The map does not confirm a booking, navigational clearance, price or transit time.</p><div class="map-source-links"><a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap attribution ${icon('external',12)}</a><a href="https://routing.openrailrouting.org/" target="_blank" rel="noopener">OpenRailRouting ${icon('external',12)}</a><a href="https://project-osrm.org/" target="_blank" rel="noopener">OSRM road routing ${icon('external',12)}</a><a href="https://www.adsb.lol/docs/open-data/historical" target="_blank" rel="noopener">ADSB.lol historical data ${icon('external',12)}</a><a href="https://github.com/genthalili/searoute-py" target="_blank" rel="noopener">SeaRoute ${icon('external',12)}</a><a href="https://github.com/smdg-org/Terminal-Code-List" target="_blank" rel="noopener">SMDG terminals ${icon('external',12)}</a><a href="https://www.naturalearthdata.com/" target="_blank" rel="noopener">Natural Earth ${icon('external',12)}</a><a href="${appUrl('assets/tracks/README.md')}" target="_blank" rel="noopener">Acquisition notes & limitations ${icon('external',12)}</a></div></div><footer class="dialog-footer"><button class="button primary" data-action="close">Back to map ${icon('arrow',15)}</button></footer>`);
 }
 function constraints() {
   showDialog('Set your planning limits',planningLimitsForm(settings,icon),{type:'constraints'});
@@ -527,7 +528,7 @@ document.addEventListener("click", (event) => {
   if(action==='assumption-step'){const key=value;queueScenarioUpdate(key,settings[key]+Number(el.dataset.direction)*(key==='fuel'?5:1));return;}
   if(action==='focus-scenario-lab'){$('#scenario-lab').scrollIntoView({block:'start',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});$('#scenario-fuel').focus({preventScroll:true});return;}
   if(action==='compare-baseline'){compareDialog([mapReference(settings).id,settings.selected]);return;}
-  if(action==='try-delay-scenario'){settings=applyStressPreset({...DEFAULTS},'delay');view='planner';chartMode='map';mapWide=false;activeMapLocation=null;history.pushState({},'','/');store();render();$('.planner-grid').scrollIntoView({block:'start',behavior:'instant'});return;}
+  if(action==='try-delay-scenario'){settings=applyStressPreset({...DEFAULTS},'delay');view='planner';chartMode='map';mapWide=false;activeMapLocation=null;history.pushState({}, "", appUrl());store();render();$('.planner-grid').scrollIntoView({block:'start',behavior:'instant'});return;}
   if(action==='preview-toggle'){journeyPreview.toggle();return;}
   if(action==='preview-restart'){journeyPreview.restart();return;}
 
@@ -550,7 +551,7 @@ document.addEventListener("click", (event) => {
   if(action==='undo-delete'&&recentlyDeleted){if(saved.some(record=>record.id===recentlyDeleted.record.id)){recentlyDeleted=null;render();toast('That scenario is already in your collection.');return;}if(saved.length>=MAX_SCENARIOS){toast('Remove a scenario to make room before undoing.');return;}saved.splice(recentlyDeleted.index,0,recentlyDeleted.record);recentlyDeleted=null;store();render();return;}
   if(action==='export-backup'){try{download('ValencePort_scenarios.json',createBackup(saved),'application/json');toast('Scenario backup exported.');}catch(error){toast(error.message);}return;}
   if(action==='import-backup'){if(modal)closeDialog();$('#scenario-backup').click();return;}
-  if(action==='confirm-import'&&pendingImport){saved.push(...pendingImport.additions);pendingImport=null;recentlyDeleted=null;collectionQuery='';starredOnly=false;store();closeDialog();view='saved';history.pushState({},'', '/#saved');render();toast('Scenario collection imported.');return;}
+  if(action==='confirm-import'&&pendingImport){saved.push(...pendingImport.additions);pendingImport=null;recentlyDeleted=null;collectionQuery='';starredOnly=false;store();closeDialog();view='saved';history.pushState({}, "", appUrl("#saved"));render();toast('Scenario collection imported.');return;}
   if (action === "nav") {
     event.preventDefault();
     if (modal) closeDialog();
@@ -558,7 +559,7 @@ document.addEventListener("click", (event) => {
     history.pushState(
       { view },
       "",
-      view === "case" ? "/case-study" : view === "planner" ? "/" : `/#${view}`,
+      view === "case" ? appUrl("case-study/") : view === "planner" ? appUrl() : appUrl(`#${view}`),
     );
     render();
     window.scrollTo({ top: 0, behavior: "instant" });
@@ -569,7 +570,7 @@ document.addEventListener("click", (event) => {
     compare = new Set();
     view = "planner";
     store();
-    history.pushState({}, "", "/");
+    history.pushState({}, "", appUrl());
     render();
     window.scrollTo({ top: 0, behavior: "instant" });
     return;
@@ -616,7 +617,7 @@ document.addEventListener("click", (event) => {
     settings.selected = value;
     if (view === "case") {
       view = "planner";
-      history.pushState({}, "", "/");
+      history.pushState({}, "", appUrl());
       window.scrollTo({ top: 0, behavior: "instant" });
     }
     store();
@@ -661,7 +662,7 @@ document.addEventListener("click", (event) => {
       closeDialog();
       if (view !== "planner") {
         view = "planner";
-        history.pushState({}, "", "/");
+        history.pushState({}, "", appUrl());
         render();
       }
     } else {
@@ -717,7 +718,7 @@ document.addEventListener("click", (event) => {
       settings = validateSettings({ ...d.settings, selected: d.routeId });
       store();
       view = "planner";
-      history.pushState({}, "", "/");
+      history.pushState({}, "", appUrl());
       render();
       window.scrollTo({ top: 0, behavior: "instant" });
       toast("Saved assumptions loaded. The original record is preserved.");
@@ -864,7 +865,7 @@ document.addEventListener("click", (e) => {
 });
 window.addEventListener("popstate", () => {
   if (modal) closeDialog();
-  view = location.pathname.startsWith("/case-study")
+  view = appPath(location.pathname) === "/case-study"
     ? "case"
     : ["saved", "history"].includes(location.hash.slice(1))
       ? location.hash.slice(1)
