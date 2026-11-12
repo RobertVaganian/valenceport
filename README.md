@@ -16,9 +16,10 @@
   [![JavaScript](https://img.shields.io/badge/JavaScript-ES_modules-435f56?style=flat)](dist/app.js)
   [![Node](https://img.shields.io/badge/Node-%E2%89%A522-435f56?style=flat)](package.json)
   [![Runtime dependencies](https://img.shields.io/badge/runtime_dependencies-0-435f56?style=flat)](package.json)
-  [![Tests](https://img.shields.io/badge/behavior_tests-80-435f56?style=flat)](tests/)
+  [![Tests](https://img.shields.io/badge/behavior_tests-84-435f56?style=flat)](tests/)
 
-  [Explore the workspace](https://robertvaganian.github.io/valenceport/) ·
+  [Open the prototype](https://robertvaganian.github.io/valenceport/) ·
+  [Case study](https://robertvaganian.github.io/valenceport/case-study/) ·
   [Run locally](#run-locally) ·
   [Design decisions](#design-decisions)
 
@@ -113,7 +114,7 @@ Open **http://127.0.0.1:8080**. The interactive case study is at **http://127.0.
 npm run check
 ```
 
-This checks JavaScript syntax and runs the 80 behavior tests. Serve the app through HTTP; opening `dist/index.html` directly does not load its modules correctly.
+This checks JavaScript syntax and runs the 84 behavior tests. Serve the app through HTTP; opening `dist/index.html` directly does not load its modules correctly.
 
 <details>
 <summary><strong>Implementation, calculations and data sources</strong></summary>
@@ -141,4 +142,5 @@ A self-initiated portfolio concept by **[Robert Vaganian](https://github.com/Rob
 The case study explains design decisions and interface validation. No user research results or measured business impact are claimed.
 
 Natural Earth is public domain. SeaRoute uses Apache 2.0; OSM-derived network data and ADSB.lol observations use ODbL 1.0. Credits are included with the [route data](dist/assets/tracks/README.md); the self-hosted fonts include their [OFL licenses](dist/assets/fonts/README.md).
+
 
