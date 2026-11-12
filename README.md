@@ -1,8 +1,8 @@
 <div align="center">
 
   <picture>
-    <source media="(prefers-reduced-motion: reduce)" srcset="docs/brand/valenceport-mark.png">
-    <img src="docs/brand/valenceport-animated.gif" alt="ValencePort — two paths forming a connected V" width="88" height="88">
+    <source media="(prefers-reduced-motion: reduce)" srcset="docs/brand/valenceport-mark.png?v=2">
+    <img src="docs/brand/valenceport-animated.gif?v=2" alt="ValencePort — two paths forming a connected V" width="88" height="88">
   </picture>
 
   # ValencePort
