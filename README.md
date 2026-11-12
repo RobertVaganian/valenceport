@@ -16,7 +16,7 @@
   [![JavaScript](https://img.shields.io/badge/JavaScript-ES_modules-435f56?style=flat)](dist/app.js)
   [![Node](https://img.shields.io/badge/Node-%E2%89%A522-435f56?style=flat)](package.json)
   [![Runtime dependencies](https://img.shields.io/badge/runtime_dependencies-0-435f56?style=flat)](package.json)
-  [![Tests](https://img.shields.io/badge/behavior_tests-84-435f56?style=flat)](tests/)
+  [![Tests](https://img.shields.io/badge/behavior_tests-90-435f56?style=flat)](tests/)
 
   [Open the prototype](https://robertvaganian.github.io/valenceport/) ·
   [Case study](https://robertvaganian.github.io/valenceport/case-study/) ·
@@ -34,6 +34,8 @@ The starting plan costs **€16,880** but arrives **five days late**. The Suez a
 ## The workspace
 
 Six views from the working prototype, in light and dark themes. Select any screen to inspect it at full size.
+
+On phones, route cards replace the wide table, comparisons stack vertically, and the map opens into a dedicated full-screen view. Planning limits, scenario controls and saved decisions remain available.
 
 <table>
   <tr>
@@ -114,7 +116,7 @@ Open **http://127.0.0.1:8080**. The interactive case study is at **http://127.0.
 npm run check
 ```
 
-This checks JavaScript syntax and runs the 84 behavior tests. Serve the app through HTTP; opening `dist/index.html` directly does not load its modules correctly.
+This checks JavaScript syntax and runs the 90 behavior tests. Serve the app through HTTP; opening `dist/index.html` directly does not load its modules correctly.
 
 <details>
 <summary><strong>Implementation, calculations and data sources</strong></summary>
