@@ -5,6 +5,7 @@ import {
   zoomAt,
   wheelScale,
   cameraTransform,
+  pinchAt,
 } from "./map-camera.mjs";
 
 export function createMapNavigation(getMap, getActiveLocation = () => null, onFit = () => {}) {
@@ -15,6 +16,8 @@ export function createMapNavigation(getMap, getActiveLocation = () => null, onFi
     suppressClickUntil = 0,
     observedMap,
     wheelFrame = 0, wheelTime = 0, wheelMap = null;
+  const touches = new Map();
+  let pinch = null;
   const reduced = () =>
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const staticMaps = new Set();
@@ -28,6 +31,7 @@ export function createMapNavigation(getMap, getActiveLocation = () => null, onFi
     }
     const map = getMap();
     if (observedMap !== map) {
+      touches.clear(); pinch = null; drag = null;
       if (observedMap) resizeObserver.unobserve(observedMap);
       observedMap = map;
       if (map) resizeObserver.observe(map);
@@ -131,6 +135,22 @@ export function createMapNavigation(getMap, getActiveLocation = () => null, onFi
 
   document.addEventListener("pointerdown", (event) => {
     const map = getMap();
+    if (event.pointerType === 'touch' && map?.contains(event.target)) {
+      // The embedded map leaves a one-finger swipe to the page.
+      if (!map.closest('.planner-grid.map-wide')) return;
+      if (touches.size >= 2) return;
+      touches.set(event.pointerId, {x:event.clientX, y:event.clientY});
+      if (touches.size === 2) {
+        cancelAnimationFrame(frame); cancelAnimationFrame(wheelFrame); wheelFrame = 0;
+        const [a,b] = [...touches.values()];
+        pinch = {map, camera:{...current}, distance:Math.max(1,Math.hypot(a.x-b.x,a.y-b.y)), midpoint:pointInMap(map,(a.x+b.x)/2,(a.y+b.y)/2)};
+        drag = null;
+        for (const pointer of touches.keys()) map.setPointerCapture(pointer);
+        map.classList.add('is-dragging');
+        event.preventDefault();
+        return;
+      }
+    }
     if (
       !map ||
       !map.contains(event.target) ||
@@ -150,6 +170,14 @@ export function createMapNavigation(getMap, getActiveLocation = () => null, onFi
     };
   });
   document.addEventListener("pointermove", (event) => {
+    if (touches.has(event.pointerId)) touches.set(event.pointerId,{x:event.clientX,y:event.clientY});
+    if (pinch?.map.isConnected && touches.size >= 2) {
+      const [a,b] = [...touches.values()];
+      const midpoint = pointInMap(pinch.map,(a.x+b.x)/2,(a.y+b.y)/2);
+      move(pinchAt(pinch.camera,pinch.camera.scale*Math.hypot(a.x-b.x,a.y-b.y)/pinch.distance,pinch.midpoint,midpoint),false);
+      event.preventDefault();
+      return;
+    }
     if (!drag || event.pointerId !== drag.pointer || !drag.map.isConnected)
       return;
     if (
@@ -173,6 +201,18 @@ export function createMapNavigation(getMap, getActiveLocation = () => null, onFi
     event.preventDefault();
   });
   function endDrag(event) {
+    if (pinch && !touches.has(event.pointerId)) return;
+    const touchMap = pinch?.map || drag?.map;
+    touches.delete(event.pointerId);
+    if (pinch) {
+      suppressClickUntil = performance.now() + 200;
+      pinch = null;
+      if (touchMap?.hasPointerCapture(event.pointerId)) touchMap.releasePointerCapture(event.pointerId);
+      const remaining = [...touches.entries()][0];
+      drag = remaining ? {map:touchMap,pointer:remaining[0],x:remaining[1].x,y:remaining[1].y,start:{...current},moved:false} : null;
+      if (!drag) touchMap?.classList.remove('is-dragging');
+      return;
+    }
     if (!drag || event.pointerId !== drag.pointer) return;
     if (drag.moved) suppressClickUntil = performance.now() + 150;
     if (drag.map.hasPointerCapture(event.pointerId))
@@ -183,6 +223,9 @@ export function createMapNavigation(getMap, getActiveLocation = () => null, onFi
   document.addEventListener("pointerup", endDrag);
   document.addEventListener("pointercancel", endDrag);
   window.addEventListener("blur", () => {
+    for (const pointer of touches.keys()) if (observedMap?.hasPointerCapture(pointer)) observedMap.releasePointerCapture(pointer);
+    observedMap?.classList.remove('is-dragging');
+    touches.clear(); pinch = null;
     if (drag) endDrag({ pointerId: drag.pointer });
   });
   document.addEventListener(

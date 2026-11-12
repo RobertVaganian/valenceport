@@ -37,3 +37,14 @@ export function wheelScale(scale, delta, mode = 0) {
 export function cameraTransform(camera) {
   return `translate(${camera.x}px, ${camera.y}px) scale(${camera.scale})`;
 }
+
+// Follow both the distance and midpoint of a two-finger gesture.
+export function pinchAt(camera, scale, start, midpoint) {
+  const next = Math.max(MAP_BOUNDS.min, Math.min(MAP_BOUNDS.max, scale));
+  const ratio = next / camera.scale;
+  return constrainCamera({
+    scale: next,
+    x: midpoint.x - (start.x - camera.x) * ratio,
+    y: midpoint.y - (start.y - camera.y) * ratio,
+  });
+}
