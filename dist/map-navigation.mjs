@@ -1,4 +1,4 @@
-import { updateMapAnnotations } from "./map-annotations.mjs";
+import { updateMapAnnotations } from "./map-annotations.mjs?v=mobile-1";
 import {
   FIT_CAMERA,
   constrainCamera,
@@ -6,7 +6,7 @@ import {
   wheelScale,
   cameraTransform,
   pinchAt,
-} from "./map-camera.mjs";
+} from "./map-camera.mjs?v=mobile-1";
 
 export function createMapNavigation(getMap, getActiveLocation = () => null, onFit = () => {}) {
   let current = { ...FIT_CAMERA },

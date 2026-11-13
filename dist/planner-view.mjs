@@ -1,4 +1,4 @@
-import {routeCards,mapFocusSummary} from './mobile-workspace.mjs';
+import {routeCards,mapFocusSummary} from './mobile-workspace.mjs?v=mobile-1';
 import {advisoryButton} from './corridor-advisory.mjs';
 import {DEPARTURE,rankRoutes,money,dateLabel,referenceRoute} from './model.mjs';
 import {routeGroups,priorityLabel,mapReference,columnSortState} from './planner-model.mjs';
