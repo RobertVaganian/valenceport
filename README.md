@@ -17,6 +17,7 @@
   [![Node](https://img.shields.io/badge/Node-%E2%89%A522-435f56?style=flat)](package.json)
   [![Runtime dependencies](https://img.shields.io/badge/runtime_dependencies-0-435f56?style=flat)](package.json)
   [![Tests](https://img.shields.io/badge/behavior_tests-90-435f56?style=flat)](tests/)
+  [![Responsive](https://img.shields.io/badge/responsive-desktop_%C2%B7_tablet_%C2%B7_mobile-435f56?style=flat)](#desktop-to-mobile)
 
   [Open the prototype](https://robertvaganian.github.io/valenceport/) ·
   [Case study](https://robertvaganian.github.io/valenceport/case-study/) ·
@@ -34,8 +35,6 @@ The starting plan costs **€16,880** but arrives **five days late**. The Suez a
 ## The workspace
 
 Six views from the working prototype, in light and dark themes. Select any screen to inspect it at full size.
-
-On phones, route cards replace the wide table, comparisons stack vertically, and the map opens into a dedicated full-screen view. Planning limits, scenario controls and saved decisions remain available.
 
 <table>
   <tr>
@@ -75,6 +74,18 @@ On phones, route cards replace the wide table, comparisons stack vertically, and
     </td>
   </tr>
 </table>
+
+## Desktop to mobile
+
+Open ValencePort on a desktop, tablet or phone — directly in the browser, with no installation. The workspace adapts to the available space, keeping route planning, scenario testing and saved decisions within reach.
+
+| On a phone | How the workspace adapts |
+| --- | --- |
+| Route options | Readable cards replace the wide table; comparisons stack vertically. |
+| The map | A dedicated full-screen view supports dragging and pinch-to-zoom. |
+| Everyday controls | Bottom navigation, larger tap targets and compact forms suit smaller screens. |
+
+Light and dark themes carry across screen sizes. [Try it on your phone →](https://robertvaganian.github.io/valenceport/)
 
 ## A planning session
 
