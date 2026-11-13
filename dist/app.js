@@ -1,12 +1,12 @@
 import { appUrl, appPath } from './paths.mjs';
-import { compactComparison } from './mobile-workspace.mjs';
+import { compactComparison } from './mobile-workspace.mjs?v=mobile-1';
 import {advisoryDialog} from './corridor-advisory.mjs';
-import {planningLimitsForm,createPlanningControls} from './planning-controls.mjs';
+import {planningLimitsForm,createPlanningControls} from './planning-controls.mjs?v=mobile-1';
 import {createTourPlayback} from './tour-playback.mjs';
 import {createPresetMenu} from './preset-menu.mjs';
 import {createProfileMenu} from './profile-menu.mjs';
-import {caseStudyView} from './case-editorial.mjs';
-import {guideView,guideFrame,guideSteps as tourSteps} from './guide.mjs';
+import {caseStudyView} from './case-editorial.mjs?v=mobile-1';
+import {guideView,guideFrame,guideSteps as tourSteps} from './guide.mjs?v=mobile-1';
 import {loadGeography} from './geography-base.mjs';
 import {
   ROUTES,
@@ -24,14 +24,14 @@ import {
 } from "./model.mjs";
 
 import {scenarioImpact} from "./scenario-impact.mjs";
-import {plannerView} from "./planner-view.mjs";
+import {plannerView} from "./planner-view.mjs?v=mobile-1";
 import {mapReference,nextTableSort} from "./planner-model.mjs";
 import {createJourneyPreview,journeyPlayer} from "./journey-preview.mjs";
 import { captureMotion, playMotion } from "./motion.mjs";
 import { syncWorkspaceLayout } from "./workspace-layout.mjs";
-import { createMapNavigation } from "./map-navigation.mjs";
+import { createMapNavigation } from "./map-navigation.mjs?v=mobile-1";
 import { routeMap } from "./route-map.mjs";
-import { routeLocations } from "./map-layout.mjs";
+import { routeLocations } from "./map-layout.mjs?v=mobile-1";
 import { geometryId } from "./route-geometry.mjs";
 import { routeComparisonCsv, timelineFor } from "./planning.mjs";
 import {

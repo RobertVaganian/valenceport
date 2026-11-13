@@ -1,5 +1,5 @@
 import {updateGeographicContext} from './geographic-context.mjs';
-import { layoutMapLabels } from './map-layout.mjs';
+import { layoutMapLabels } from './map-layout.mjs?v=mobile-1';
 
 export function updateMapAnnotations(map,camera,active=null) {
   const bounds=map.getBoundingClientRect(),pixelScale=Math.min(bounds.width/1000,bounds.height/610);
