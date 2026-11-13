@@ -40,36 +40,36 @@ Six views from the working prototype, in light and dark themes. Select any scree
   <tr>
     <td width="50%" valign="top">
       <strong>01 · Route planning</strong><br><br>
-      <a href="docs/screenshots/01-planner-dark.jpg"><img src="docs/screenshots/01-planner-dark.jpg" alt="Map the selected corridor against its baseline." width="440"></a><br>
+      <a href="docs/screenshots/01-planner-dark.jpg?v=clean-1"><img src="docs/screenshots/01-planner-dark.jpg?v=clean-1" alt="Map the selected corridor against its baseline." width="440"></a><br>
       <sub>Map the selected corridor against its baseline.</sub>
     </td>
     <td width="50%" valign="top">
       <strong>02 · Cost and time</strong><br><br>
-      <a href="docs/screenshots/02-tradeoffs-light.jpg"><img src="docs/screenshots/02-tradeoffs-light.jpg" alt="See the deadline, budget and emissions trade-off." width="440"></a><br>
+      <a href="docs/screenshots/02-tradeoffs-light.jpg?v=clean-1"><img src="docs/screenshots/02-tradeoffs-light.jpg?v=clean-1" alt="See the deadline, budget and emissions trade-off." width="440"></a><br>
       <sub>See the deadline, budget and emissions trade-off.</sub>
     </td>
   </tr>
   <tr>
     <td width="50%" valign="top">
       <strong>03 · Planned journey</strong><br><br>
-      <a href="docs/screenshots/03-journey-dark.jpg"><img src="docs/screenshots/03-journey-dark.jpg" alt="Inspect the stages behind an arrival estimate." width="440"></a><br>
+      <a href="docs/screenshots/03-journey-dark.jpg?v=clean-1"><img src="docs/screenshots/03-journey-dark.jpg?v=clean-1" alt="Inspect the stages behind an arrival estimate." width="440"></a><br>
       <sub>Inspect the stages behind an arrival estimate.</sub>
     </td>
     <td width="50%" valign="top">
       <strong>04 · Compare alternatives</strong><br><br>
-      <a href="docs/screenshots/04-comparison-light.jpg"><img src="docs/screenshots/04-comparison-light.jpg" alt="Read costs, arrival and emissions side by side." width="440"></a><br>
+      <a href="docs/screenshots/04-comparison-light.jpg?v=clean-1"><img src="docs/screenshots/04-comparison-light.jpg?v=clean-1" alt="Read costs, arrival and emissions side by side." width="440"></a><br>
       <sub>Read costs, arrival and emissions side by side.</sub>
     </td>
   </tr>
   <tr>
     <td width="50%" valign="top">
       <strong>05 · Preserve the rationale</strong><br><br>
-      <a href="docs/screenshots/05-rationale-dark.jpg"><img src="docs/screenshots/05-rationale-dark.jpg" alt="Keep the assumptions and reason with the plan." width="440"></a><br>
+      <a href="docs/screenshots/05-rationale-dark.jpg?v=clean-1"><img src="docs/screenshots/05-rationale-dark.jpg?v=clean-1" alt="Keep the assumptions and reason with the plan." width="440"></a><br>
       <sub>Keep the assumptions and reason with the plan.</sub>
     </td>
     <td width="50%" valign="top">
       <strong>06 · Inside the design</strong><br><br>
-      <a href="docs/screenshots/06-case-study-light.jpg"><img src="docs/screenshots/06-case-study-light.jpg" alt="Explore the product decisions in an interactive case study." width="440"></a><br>
+      <a href="docs/screenshots/06-case-study-light.jpg?v=clean-1"><img src="docs/screenshots/06-case-study-light.jpg?v=clean-1" alt="Explore the product decisions in an interactive case study." width="440"></a><br>
       <sub>Explore the product decisions in an interactive case study.</sub>
     </td>
   </tr>
