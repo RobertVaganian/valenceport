@@ -1,4 +1,5 @@
 import { appUrl, appPath } from './paths.mjs';
+import { compactComparison } from './mobile-workspace.mjs';
 import {advisoryDialog} from './corridor-advisory.mjs';
 import {planningLimitsForm,createPlanningControls} from './planning-controls.mjs';
 import {createTourPlayback} from './tour-playback.mjs';
@@ -129,6 +130,7 @@ function read(key, fallback) {
 }
 document.body.dataset.density="comfortable";
 let navigationHidden=read("vp-navigation-hidden",false),mapDetails=true;
+const compactViewport = matchMedia('(max-width: 700px)');
 let settings = validateSettings(read("vp-settings", DEFAULTS));
 let saved = normaliseScenarios(read("vp-decisions", []));
 let collectionQuery = "", starredOnly = false, recentlyDeleted = null, pendingImport = null, chartRange = "focus";
@@ -225,15 +227,26 @@ function formatTime(s) {
 const mark = `<img src="${appUrl('assets/mark.svg')}" alt="" width="32" height="32">`;
 function shell() {
   $("#app").innerHTML =
-    `<aside class="sidebar" id="workspace-navigation"><a href="${appUrl()}" class="brand" aria-label="ValencePort home">${mark}<span>Valence<span class="brand-port">Port</span></span></a><div class="workspace-label">NORTHSTAR INDUSTRIAL ${icon("down", 12)}</div><div class="workspace-identity"><span class="workspace-avatar">N</span><span>Planning workspace<small>Europe operations</small></span></div><div class="nav-label">WORKSPACE</div><nav aria-label="Workspace"><button data-action="nav" data-view="planner" title="Route planner">${icon("route")}<span>Route planner</span></button><button data-action="nav" data-view="saved" title="Saved scenarios">${icon("folder")}<span>Saved scenarios</span><b id="saved-count">${saved.length}</b></button><button data-action="nav" data-view="history" title="Decision log">${icon("history")}<span>Decision log</span></button></nav><div class="sidebar-note"><span class="live-dot"></span> Demo workspace<small>Make a plan. Explore the trade-offs.</small></div><div class="sidebar-bottom"><a href="${appUrl('case-study/')}" data-action="nav" data-view="case" title="Inside the design">${icon("document")}<span>Inside the design</span>${icon("external", 13)}</a><button class="guide-launch" data-action="guide" title="Animated walkthrough"><span class="guide-play">${icon("play",13)}</span><span>Quick tour</span><small>5 steps</small></button></div></aside><div class="app-body"><header class="topbar"><div class="topbar-start"><button class="icon-button navigation-toggle" data-action="toggle-navigation" aria-controls="workspace-navigation" aria-expanded="${!navigationHidden}" aria-label="${navigationHidden?'Show navigation':'Hide navigation'}" title="${navigationHidden?'Show navigation':'Hide navigation'}">${icon("panel",18)}</button><div class="breadcrumb"><span>Workspace</span><span class="breadcrumb-divider">/</span><strong id="breadcrumb-current">Route planner</strong></div></div><div class="topbar-right"><span class="saved-local">${icon("check", 12)} ${storageAvailable ? "Saved locally" : "Session only"}</span><button class="icon-button" data-action="theme" aria-label="Switch colour theme">${icon(theme === "dark" ? "sun" : "moon", 17)}</button><button class="avatar small profile-trigger" data-action="profile" aria-label="Open profile" aria-expanded="false" aria-controls="profile-menu" aria-haspopup="menu" title="Profile & workspace">RV</button></div></header><main id="main" tabindex="-1"></main></div>`;
+    `<aside class="sidebar" id="workspace-navigation"><a href="${appUrl()}" class="brand" aria-label="ValencePort home">${mark}<span>Valence<span class="brand-port">Port</span></span></a><div class="workspace-label">NORTHSTAR INDUSTRIAL ${icon("down", 12)}</div><div class="workspace-identity"><span class="workspace-avatar">N</span><span>Planning workspace<small>Europe operations</small></span></div><div class="nav-label">WORKSPACE</div><nav aria-label="Workspace"><button data-action="nav" data-view="planner" title="Route planner">${icon("route")}<span class="nav-full">Route planner</span><span class="nav-short">Plan</span></button><button data-action="nav" data-view="saved" title="Saved scenarios">${icon("folder")}<span class="nav-full">Saved scenarios</span><span class="nav-short">Saved</span><b id="saved-count">${saved.length}</b></button><button data-action="nav" data-view="history" title="Decision log">${icon("history")}<span class="nav-full">Decision log</span><span class="nav-short">History</span></button><button class="mobile-only" data-action="nav" data-view="case" title="Inside the design">${icon("document")}<span>Case study</span></button></nav><div class="sidebar-note"><span class="live-dot"></span> Demo workspace<small>Make a plan. Explore the trade-offs.</small></div><div class="sidebar-bottom"><a href="${appUrl('case-study/')}" data-action="nav" data-view="case" title="Inside the design">${icon("document")}<span>Inside the design</span>${icon("external", 13)}</a><button class="guide-launch" data-action="guide" title="Animated walkthrough"><span class="guide-play">${icon("play",13)}</span><span>Quick tour</span><small>5 steps</small></button></div></aside><div class="app-body"><header class="topbar"><div class="topbar-start"><a class="mobile-brand" href="${appUrl()}" data-action="nav" data-view="planner" aria-label="ValencePort home">${mark}<span>ValencePort</span></a><button class="icon-button navigation-toggle" data-action="toggle-navigation" aria-controls="workspace-navigation" aria-expanded="${!navigationHidden}" aria-label="${navigationHidden?'Show navigation':'Hide navigation'}" title="${navigationHidden?'Show navigation':'Hide navigation'}">${icon("panel",18)}</button><div class="breadcrumb"><span>Workspace</span><span class="breadcrumb-divider">/</span><strong id="breadcrumb-current">Route planner</strong></div></div><div class="topbar-right"><span class="saved-local">${icon("check", 12)} ${storageAvailable ? "Saved locally" : "Session only"}</span><button class="icon-button" data-action="theme" aria-label="Switch colour theme">${icon(theme === "dark" ? "sun" : "moon", 17)}</button><button class="avatar small profile-trigger" data-action="profile" aria-label="Open profile" aria-expanded="false" aria-controls="profile-menu" aria-haspopup="menu" title="Profile & workspace">RV</button></div></header><main id="main" tabindex="-1"></main></div>`;
   syncNavigation();
   render();
 }
-function syncNavigation(){document.body.classList.toggle("navigation-hidden",navigationHidden);const nav=$(".sidebar");if(nav){nav.inert=navigationHidden;nav.setAttribute("aria-hidden",String(navigationHidden));}const toggle=$(".navigation-toggle");if(toggle){toggle.setAttribute("aria-expanded",String(!navigationHidden));toggle.setAttribute("aria-label",navigationHidden?"Show navigation":"Hide navigation");toggle.title=navigationHidden?"Show navigation":"Hide navigation";}}
+function syncNavigation() {
+  const hidden = !compactViewport.matches && navigationHidden;
+  document.body.classList.toggle('navigation-hidden', hidden);
+  const nav = $('.sidebar');
+  if (nav) { nav.inert = hidden; nav.setAttribute('aria-hidden', String(hidden)); }
+  const toggle = $('.navigation-toggle');
+  if (toggle) {
+    toggle.setAttribute('aria-expanded', String(!hidden));
+    toggle.setAttribute('aria-label', hidden ? 'Show navigation' : 'Hide navigation');
+    toggle.title = hidden ? 'Show navigation' : 'Hide navigation';
+  }
+}
 // Keep the live controls connected while ranges are being dragged or numbers typed.
 function updateScenarioRegions(html,keepMap) {
   const next=document.createElement('template');next.innerHTML=html;
-  const selectors=['.shipment-workspace','.planning-selection','.decision-summary','.scenario-lab-heading','.scenario-preset-label','.scenario-impact','.planning-secondary','.scenario-section','.journey-player','.map-location-outside','.mobile-lab-jump'];
+  const selectors=['.shipment-workspace','.planning-selection','.decision-summary','.scenario-lab-heading','.scenario-preset-label','.scenario-impact','.planning-secondary','.scenario-section','.journey-player','.map-location-outside','.mobile-lab-jump','.map-panel > .map-route-legend'];
   for(const selector of selectors){const old=$(selector),fresh=$(selector,next.content);if(old&&fresh)old.replaceWith(fresh);}
   const oldStep=$('.scenario-next-step'),freshStep=$('.scenario-next-step',next.content);
   if(oldStep){if(freshStep)oldStep.replaceWith(freshStep);else oldStep.remove();}
@@ -256,6 +269,7 @@ function render() {
     labelKey = active?.getAttribute("aria-label"),
     selection = active?.selectionStart;
   document.body.classList.toggle("case-view", view === "case");
+  document.body.classList.toggle('map-expanded', view === 'planner' && chartMode === 'map' && mapWide);
   document.body.classList.toggle(
     "has-comparison",
     view === "planner" && compare.size >= 1,
@@ -274,6 +288,7 @@ function render() {
     else el.removeAttribute("aria-current");
   });
   $("#saved-count").textContent = saved.length;
+  $("#saved-count").hidden = compactViewport.matches && saved.length === 0;
   const html =
     view === "planner"
       ? planner()
@@ -327,7 +342,7 @@ function render() {
       (routePicker.clientWidth - buttonBounds.width) / 2;
   }
 }
-function planner(){return plannerView({settings,compare,chartMode,mapWide,showAllRoutes,activeMapLocation,activeLeg,costDetailsOpen,mapDetails,showRecorded},{icon,map,mapLocationCard,tradeoffChart});}
+function planner(){return plannerView({settings,compare,chartMode,mapWide,showAllRoutes,activeMapLocation,activeLeg,costDetailsOpen,mapDetails,showRecorded,compact:compactViewport.matches},{icon,map,mapLocationCard,tradeoffChart});}
 function map(r, referenceId = settings.baseline, interactive = true) {
   return routeMap(r, referenceId, {
     interactive,
@@ -385,8 +400,8 @@ function corridorDetails(){
  const rail=r.mode==='rail',air=r.mode==='air',mixed=r.mode==='multimodal';
  showDialog('Map sources & credits',`<div class="dialog-content methodology"><span class="overline">${esc(r.name)}</span><h3>Move around</h3><p>Scroll over the map to zoom around your pointer. Drag the enlarged map to move. Use + / − or Fit at the lower right; Expand opens a wider view. Keyboard: focus the map, then + / − to zoom, arrows to move, and 0 to fit.</p><h3>Read the route</h3><p>${descriptions[r.id]}</p><p>Solid: selected network route. Dashed: comparison route, air connection or ferry link. A dashed air arc shows connected airports; it does not claim a flown track.</p><h3>How precise is the line?</h3><p>${rail?'The two rail sections follow OpenStreetMap railway geometry via OpenRailRouting, acquired 6 November 2026. Kuryk–Alat is a separate indicative Caspian ferry link. Tracks are geographically routed candidates; freight permissions, gauge transfers and operating availability require operator confirmation.':air?'The PVG–AMS arc is a great-circle connection. The road delivery follows the OSRM road network.':mixed?'Sea legs follow the SeaRoute network. Jebel Ali–DWC and Amsterdam–Rotterdam follow the OSRM road network. The DWC–AMS arc is a great-circle connection; no verified flight trace is available.':'Sea legs follow the SeaRoute maritime network and SMDG terminal coordinates; Cape routing excludes Suez.'}</p>${air||mixed?'<p>Road geometry uses the driving profile, not certified truck clearance. Short dotted access connectors cover terminal snaps of up to 504 m; private terminal access is unverified.</p>':''}${air?`<h3>A recorded example, with gaps</h3><p>KL896 · PH-BKG · 4 Nov 2026. ADSB.lol provides 2,901 observations in eight separate segments. Shanghai departure is missing and the largest gap is 6 h 31 min. Only observed segments are drawn, without joining gaps. This historical passenger flight illustrates coverage; it is not the planned cargo service.</p><button class="button outline" data-action="recorded-flight">${icon('plane',16)} ${showRecorded?'Hide':'Show'} recorded segments</button>`:''}<h3>Sources & credits</h3><p>Base geography: Natural Earth 1:10m, public domain. Network data © OpenStreetMap contributors, ODbL 1.0. Observations © ADSB.lol contributors, ODbL 1.0. The map does not confirm a booking, navigational clearance, price or transit time.</p><div class="map-source-links"><a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap attribution ${icon('external',12)}</a><a href="https://routing.openrailrouting.org/" target="_blank" rel="noopener">OpenRailRouting ${icon('external',12)}</a><a href="https://project-osrm.org/" target="_blank" rel="noopener">OSRM road routing ${icon('external',12)}</a><a href="https://www.adsb.lol/docs/open-data/historical" target="_blank" rel="noopener">ADSB.lol historical data ${icon('external',12)}</a><a href="https://github.com/genthalili/searoute-py" target="_blank" rel="noopener">SeaRoute ${icon('external',12)}</a><a href="https://github.com/smdg-org/Terminal-Code-List" target="_blank" rel="noopener">SMDG terminals ${icon('external',12)}</a><a href="https://www.naturalearthdata.com/" target="_blank" rel="noopener">Natural Earth ${icon('external',12)}</a><a href="${appUrl('assets/tracks/README.md')}" target="_blank" rel="noopener">Acquisition notes & limitations ${icon('external',12)}</a></div></div><footer class="dialog-footer"><button class="button primary" data-action="close">Back to map ${icon('arrow',15)}</button></footer>`);
 }
-function constraints() {
-  showDialog('Set your planning limits',planningLimitsForm(settings,icon),{type:'constraints'});
+function constraints(focus) {
+  showDialog('Set your planning limits',planningLimitsForm(settings,icon,focus),{type:'constraints'});
 }
 function saveDialog() {
   if(saved.length>=MAX_SCENARIOS){toast("Your collection has 50 scenarios. Export a backup and remove a scenario first.");return;}
@@ -423,7 +438,7 @@ function compareDialog(ids = [...compare]) {
   }
   showDialog(
     "Compare the whole journey",
-    comparisonWorkbench(ids, settings, settings.selected, icon),
+    (compactViewport.matches ? compactComparison : comparisonWorkbench)(ids, settings, settings.selected, icon),
     { type: "compare", wide: true, overline: "SHP-2026-0842 / ROUTE COMPARISON" },
   );
   $(".dialog").classList.add("comparison-workbench");
@@ -521,6 +536,16 @@ document.addEventListener("click", (event) => {
   if(action==='guide-replay'){tourPlayback.replay();return;}
   if(action==='guide-phase'){tourPlayback.seek(value);return;}
   if(action==='map-details'){mapDetails=!mapDetails;render();return;}
+  if (action === 'planner-jump') {
+    const selector = {overview:'.map-panel', routes:'.scenario-section', lab:'#scenario-lab'}[value];
+    const target = selector && $(selector);
+    if (target) {
+      target.setAttribute('tabindex', '-1');
+      target.focus({preventScroll:true});
+      target.scrollIntoView({block:'start', behavior:matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth'});
+    }
+    return;
+  }
   if(action==='focus-eligible'){$('#group-eligible')?.scrollIntoView({block:'center',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});$('#group-eligible')?.focus({preventScroll:true});return;}
   if(action==='corridor-details'){corridorDetails();return;}
   if(action==='recorded-flight'){showRecorded=!showRecorded;closeDialog();render();return;}
@@ -647,7 +672,7 @@ document.addEventListener("click", (event) => {
     render();
     return;
   }
-  if (action === "constraints") constraints();
+  if (action === "constraints") constraints(value);
   else if (action === "save") saveDialog();
   else if (action === "itinerary") itinerary();
   else if (action === "compare") compareDialog();
@@ -688,6 +713,7 @@ document.addEventListener("click", (event) => {
     render();
   } else if (action === "chart-mode") {
     chartMode = value;
+    if (value !== "map") mapWide = false;
     render();
   } else if (action === "layers") {
     showAllRoutes = !showAllRoutes;
@@ -875,6 +901,11 @@ window.addEventListener("popstate", () => {
 if (["#saved", "#history"].includes(location.hash))
   view = location.hash.slice(1);
 shell();
+compactViewport.addEventListener('change', () => {
+  syncNavigation();
+  render();
+  if (modal === 'compare') compareDialog(comparisonIds);
+});
 
 function showChartTooltip(point) {
   const tip = $("#route-tooltip"),

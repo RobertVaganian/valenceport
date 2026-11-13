@@ -6,10 +6,13 @@ export function updateMapAnnotations(map,camera,active=null) {
   if(pixelScale<=0)return;
   map.style.setProperty('--map-label-scale',String(1/(pixelScale*camera.scale)));
   map.querySelector('.route-reveal-mask')?.setAttribute('stroke-width',String(12/(pixelScale*camera.scale)));
+  const compact = bounds.width < 600;
+  map.classList.toggle('compact-labels', compact);
   const nodes=[...map.querySelectorAll('[data-map-location]')];
   const locations=nodes.map(node=>({name:node.dataset.mapLocation,
     point:[Number(node.dataset.mapX),Number(node.dataset.mapY)],
-    width:Number(node.dataset.width),height:Number(node.dataset.height),
+    width:compact ? Math.min(Number(node.dataset.width), Math.max(68, node.dataset.mapLocation.length * 6.6 + 20)) : Number(node.dataset.width),
+    height:compact ? 30 : Number(node.dataset.height),
     endpoint:node.dataset.endpoint==='true',role:node.dataset.role,index:Number(node.dataset.index),
   }));
   const previousSlots=Object.fromEntries(nodes.filter(n=>n.dataset.labelSlot!==undefined).map(n=>[n.dataset.mapLocation,Number(n.dataset.labelSlot)]));
@@ -26,6 +29,7 @@ export function updateMapAnnotations(map,camera,active=null) {
     if(!item.visible)continue;
     node.dataset.labelSlot=String(item.slot);
     label.querySelector('rect').setAttribute('width',String(item.width));
+    label.querySelector('rect').setAttribute('height',String(item.height));
     const dx=item.x-item.anchorX,dy=item.y-item.anchorY;
     label.setAttribute('transform',`translate(${dx/pixelScale},${dy/pixelScale}) scale(${1/pixelScale})`);
     const endX=Math.max(0,Math.min(item.width,-dx)),endY=Math.max(0,Math.min(item.height,-dy));

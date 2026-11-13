@@ -52,7 +52,7 @@ export function layoutMapLabels(locations, camera, pixelScale, active = null, pr
   const ordered = [...anchors].sort((a,b) => Number(b.endpoint)-Number(a.endpoint) || Number(b.name===active)-Number(a.name===active) || a.index-b.index);
   for (const item of ordered) {
     const {anchorX:ax,anchorY:ay,width:nominalWidth,height:h}=item;
-    const w=item.endpoint&&width<420?114:nominalWidth;
+    const w=item.endpoint&&width<420?Math.min(114,nominalWidth):nominalWidth;
     if (ax < 6 || ax > width-6 || ay < 6 || ay > height-6) {
       placed.push({...item,visible:false,pointVisible:false}); continue;
     }
