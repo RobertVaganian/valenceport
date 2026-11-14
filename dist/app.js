@@ -1,3 +1,9 @@
+import {parseBrief,briefPreview,briefCurrent,EXAMPLE_BRIEF,CARBON_BRIEF} from './brief-model.mjs';
+import {createBriefRuntime} from './brief-runtime.mjs';
+import {briefDialog,briefOutput,inboxView} from './intelligence-views.mjs';
+import {notice,normaliseNotices,initialNotices,planningNotices,addNotice,unreadNotices,markNotice} from './notifications.mjs';
+const launchParams=new URLSearchParams(location.search);
+const isolated=launchParams.has('scene')||launchParams.has('capture');
 import { appUrl, appPath } from './paths.mjs';
 import { compactComparison } from './mobile-workspace.mjs?v=mobile-1';
 import {advisoryDialog} from './corridor-advisory.mjs';
@@ -5,7 +11,7 @@ import {planningLimitsForm,createPlanningControls} from './planning-controls.mjs
 import {createTourPlayback} from './tour-playback.mjs';
 import {createPresetMenu} from './preset-menu.mjs';
 import {createProfileMenu} from './profile-menu.mjs';
-import {caseStudyView} from './case-editorial.mjs?v=mobile-1';
+import {caseStudyView} from './case-editorial.mjs?v=2.0.0';
 import {guideView,guideFrame,guideSteps as tourSteps} from './guide.mjs?v=mobile-1';
 import {loadGeography} from './geography-base.mjs';
 import {
@@ -105,6 +111,7 @@ const shapes = {
   expand: "M3 8V3h5M16 3h5v5M21 16v5h-5M8 21H3v-5",
   sun: "M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8ZM12 2v2M12 20v2M2 12h2M20 12h2M5 5l1 1M18 18l1 1M5 19l1-1M18 6l1-1",
   moon: "M20 14A8.5 8.5 0 0 1 10 4a9 9 0 1 0 10 10Z",
+  bell: "M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4",
   mail: "M3 5h18v14H3ZM3 5l9 8 9-8",
   document: "M6 3h8l4 4v14H6ZM14 3v5h4M9 12h6M9 16h6",
 };
@@ -121,6 +128,7 @@ let caseState={route:'suez',scene:'compare',delay:0};
 let storageAvailable = true;
 let activeLeg = 0;
 function read(key, fallback) {
+  if(isolated)return fallback;
   try {
     return JSON.parse(localStorage.getItem(key)) ?? fallback;
   } catch {
@@ -172,13 +180,22 @@ function queueScenarioUpdate(key,value) {
 function flushScenarioUpdates() {
   if(scenarioRenderTimer){clearTimeout(scenarioRenderTimer);scenarioRenderTimer=null;preserveScenarioInputs=true;store();render();}
 }
-let theme = read("vp-theme", "light");
+let theme = isolated ? (launchParams.get("theme")==="dark"?"dark":"light") : read("vp-theme", "light");
 document.documentElement.dataset.theme = theme === "dark" ? "dark" : "light";
+const storedNotices=read('vp-notices-v1',null);
+let notices=Array.isArray(storedNotices)?normaliseNotices(storedNotices):initialNotices(settings);
+let lastNoticeSettings={...settings},inboxFilter='all';
+let briefEngine=null,briefRuntime={phase:'idle',loaded:false,result:null,message:'',progress:null},briefText=EXAMPLE_BRIEF,briefResult=null,briefChoice=null,briefAttempt=false;
+function refreshBell(){const count=unreadNotices(notices),button=$('[data-action="notifications"]');if(!button)return;button.setAttribute('aria-label',`Notifications, ${count} unread`);button.innerHTML=icon('bell',19)+(count?`<span class="notification-count" aria-hidden="true">${count>99?'99+':count}</span>`:'');}
+function pushNotice(item){notices=addNotice(notices,item);}
 function store() {
-  settings.mode="all";settings.query="";
+  for(const item of planningNotices(lastNoticeSettings,settings))pushNotice(item);
+  lastNoticeSettings={...settings};refreshBell();
+  if(isolated)return true;
   try {
-    localStorage.setItem("vp-settings", JSON.stringify(settings));
+    localStorage.setItem("vp-settings", JSON.stringify({...settings,mode:"all",query:""}));
     localStorage.setItem("vp-decisions", JSON.stringify(saved));
+    localStorage.setItem("vp-notices-v1",JSON.stringify(notices));
     storageAvailable = true;
     return true;
   } catch {
@@ -227,8 +244,9 @@ function formatTime(s) {
 const mark = `<img src="${appUrl('assets/mark.svg')}" alt="" width="32" height="32">`;
 function shell() {
   $("#app").innerHTML =
-    `<aside class="sidebar" id="workspace-navigation"><a href="${appUrl()}" class="brand" aria-label="ValencePort home">${mark}<span>Valence<span class="brand-port">Port</span></span></a><div class="workspace-label">NORTHSTAR INDUSTRIAL ${icon("down", 12)}</div><div class="workspace-identity"><span class="workspace-avatar">N</span><span>Planning workspace<small>Europe operations</small></span></div><div class="nav-label">WORKSPACE</div><nav aria-label="Workspace"><button data-action="nav" data-view="planner" title="Route planner">${icon("route")}<span class="nav-full">Route planner</span><span class="nav-short">Plan</span></button><button data-action="nav" data-view="saved" title="Saved scenarios">${icon("folder")}<span class="nav-full">Saved scenarios</span><span class="nav-short">Saved</span><b id="saved-count">${saved.length}</b></button><button data-action="nav" data-view="history" title="Decision log">${icon("history")}<span class="nav-full">Decision log</span><span class="nav-short">History</span></button><button class="mobile-only" data-action="nav" data-view="case" title="Inside the design">${icon("document")}<span>Case study</span></button></nav><div class="sidebar-note"><span class="live-dot"></span> Demo workspace<small>Make a plan. Explore the trade-offs.</small></div><div class="sidebar-bottom"><a href="${appUrl('case-study/')}" data-action="nav" data-view="case" title="Inside the design">${icon("document")}<span>Inside the design</span>${icon("external", 13)}</a><button class="guide-launch" data-action="guide" title="Animated walkthrough"><span class="guide-play">${icon("play",13)}</span><span>Quick tour</span><small>5 steps</small></button></div></aside><div class="app-body"><header class="topbar"><div class="topbar-start"><a class="mobile-brand" href="${appUrl()}" data-action="nav" data-view="planner" aria-label="ValencePort home">${mark}<span>ValencePort</span></a><button class="icon-button navigation-toggle" data-action="toggle-navigation" aria-controls="workspace-navigation" aria-expanded="${!navigationHidden}" aria-label="${navigationHidden?'Show navigation':'Hide navigation'}" title="${navigationHidden?'Show navigation':'Hide navigation'}">${icon("panel",18)}</button><div class="breadcrumb"><span>Workspace</span><span class="breadcrumb-divider">/</span><strong id="breadcrumb-current">Route planner</strong></div></div><div class="topbar-right"><span class="saved-local">${icon("check", 12)} ${storageAvailable ? "Saved locally" : "Session only"}</span><button class="icon-button" data-action="theme" aria-label="Switch colour theme">${icon(theme === "dark" ? "sun" : "moon", 17)}</button><button class="avatar small profile-trigger" data-action="profile" aria-label="Open profile" aria-expanded="false" aria-controls="profile-menu" aria-haspopup="menu" title="Profile & workspace">RV</button></div></header><main id="main" tabindex="-1"></main></div>`;
+    `<aside class="sidebar" id="workspace-navigation"><a href="${appUrl()}" class="brand" aria-label="ValencePort home">${mark}<span>Valence<span class="brand-port">Port</span></span></a><div class="workspace-label">NORTHSTAR INDUSTRIAL ${icon("down", 12)}</div><div class="workspace-identity"><span class="workspace-avatar">N</span><span>Planning workspace<small>Europe operations</small></span></div><div class="nav-label">WORKSPACE</div><nav aria-label="Workspace"><button data-action="nav" data-view="planner" title="Route planner">${icon("route")}<span class="nav-full">Route planner</span><span class="nav-short">Plan</span></button><button data-action="nav" data-view="saved" title="Saved scenarios">${icon("folder")}<span class="nav-full">Saved scenarios</span><span class="nav-short">Saved</span><b id="saved-count">${saved.length}</b></button><button data-action="nav" data-view="history" title="Decision log">${icon("history")}<span class="nav-full">Decision log</span><span class="nav-short">History</span></button><button class="mobile-only" data-action="nav" data-view="case" title="Inside the design">${icon("document")}<span>Case study</span></button></nav><div class="sidebar-note"><span class="live-dot"></span> Demo workspace<small>Make a plan. Explore the trade-offs.</small></div><div class="sidebar-bottom"><a href="${appUrl('case-study/')}" data-action="nav" data-view="case" title="Inside the design">${icon("document")}<span>Inside the design</span>${icon("external", 13)}</a><button class="guide-launch" data-action="guide" title="Animated walkthrough"><span class="guide-play">${icon("play",13)}</span><span>Quick tour</span><small>5 steps</small></button></div></aside><div class="app-body"><header class="topbar"><div class="topbar-start"><a class="mobile-brand" href="${appUrl()}" data-action="nav" data-view="planner" aria-label="ValencePort home">${mark}<span>ValencePort</span></a><button class="icon-button navigation-toggle" data-action="toggle-navigation" aria-controls="workspace-navigation" aria-expanded="${!navigationHidden}" aria-label="${navigationHidden?'Show navigation':'Hide navigation'}" title="${navigationHidden?'Show navigation':'Hide navigation'}">${icon("panel",18)}</button><div class="breadcrumb"><span>Workspace</span><span class="breadcrumb-divider">/</span><strong id="breadcrumb-current">Route planner</strong></div></div><div class="topbar-right"><button class="brief-launch" data-action="planning-brief" aria-label="AI: planning brief" aria-haspopup="dialog"><span>AI</span><span>Planning brief</span></button><button class="icon-button notification-trigger" data-action="notifications" aria-label="Notifications" aria-haspopup="dialog">${icon("bell",19)}</button><span class="saved-local">${icon("check", 12)} ${storageAvailable ? "Saved locally" : "Session only"}</span><button class="icon-button" data-action="theme" aria-label="Switch colour theme">${icon(theme === "dark" ? "sun" : "moon", 17)}</button><button class="avatar small profile-trigger" data-action="profile" aria-label="Open profile" aria-expanded="false" aria-controls="profile-menu" aria-haspopup="menu" title="Profile & workspace">RV</button></div></header><main id="main" tabindex="-1"></main></div>`;
   syncNavigation();
+  refreshBell();
   render();
 }
 function syncNavigation() {
@@ -364,12 +382,13 @@ function tradeoffChart() { return tradeoffView(settings,chartRange,icon); }
 function savedPage(history) { return collectionView({records:saved,history,query:collectionQuery,starredOnly,canUndo:!!recentlyDeleted},icon); }
 function caseStudy(){return caseStudyView(caseState,icon,mark);}
 function showDialog(title, content, options = {}) {
+  if(modal==='brief'&&options.type!=='brief'){const engine=briefEngine;briefEngine=null;modal=null;engine?.stop();}
   planningControls.close();
   journeyPreview.pause();
   if (!modal) lastFocus = document.activeElement;
   modal = options.type || "generic";
   $("#overlay-root").innerHTML =
-    `<div class="overlay"><section role="dialog" aria-modal="true" aria-labelledby="dialog-title" class="dialog ${options.wide ? "dialog-wide" : ""}"><header class="dialog-header"><div><span class="overline">${options.overline || "VALENCEPORT / PLANNING WORKSPACE"}</span><h2 id="dialog-title">${title}</h2></div><button class="icon-button" data-action="close" aria-label="Close dialog">${icon("close", 20)}</button></header>${content}</section></div>`;
+    `<div class="overlay"><section role="dialog" aria-modal="true" aria-labelledby="dialog-title" class="dialog ${options.wide ? "dialog-wide" : ""} ${options.className||''}"><header class="dialog-header"><div><span class="overline">${options.overline || "VALENCEPORT / PLANNING WORKSPACE"}</span><h2 id="dialog-title">${title}</h2></div><button class="icon-button" data-action="close" aria-label="Close dialog">${icon("close", 20)}</button></header>${content}</section></div>`;
   document.body.classList.add("modal-open");
   $("#app").inert = true;
   requestAnimationFrame(() => {
@@ -382,10 +401,10 @@ function showDialog(title, content, options = {}) {
 function closeDialog() {
   planningControls.close();
   tourPlayback.stop();
-  modal = null;
+  const engine=briefEngine;briefEngine=null;modal=null;engine?.stop();
   const closing=$('.overlay', $('#overlay-root'));
   if(closing&&!matchMedia('(prefers-reduced-motion: reduce)').matches){
-    closing.classList.add('is-closing');
+    closing.inert=true;closing.classList.add('is-closing');
     const finish=event=>{if(event.target===closing){closing.removeEventListener('animationend',finish);closing.remove();}};
     closing.addEventListener('animationend',finish);
     setTimeout(()=>closing.remove(),220);
@@ -394,6 +413,29 @@ function closeDialog() {
   $("#app").inert = false;
   lastFocus?.isConnected && lastFocus.focus({ preventScroll: true });
 }
+
+function openPlanningBrief(){
+ briefResult=null;briefChoice=null;briefAttempt=false;briefRuntime={phase:'idle',loaded:false,result:null,message:'',progress:null};
+ showDialog('Plan from a brief',briefDialog(briefText,icon),{type:'brief',wide:true,className:'planning-brief-dialog',overline:'ON-DEVICE AI / PLANNING BRIEF'});
+ briefEngine=createBriefRuntime(value=>{if(modal!=='brief')return;briefRuntime=value;if(value.phase==='complete'){briefResult={...value.result,mode:'local'};briefChoice=null;}refreshBrief();if(value.phase==='complete'){const heading=$('[data-brief-result-heading]');heading?.focus({preventScroll:true});if(compactViewport.matches)heading?.scrollIntoView({block:'start',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});}});
+ refreshBrief();
+}
+function refreshBrief(){
+ if(modal!=='brief')return;const root=$('#overlay-root'),busy=['loading','interpreting','removing'].includes(briefRuntime.phase),parsed=parseBrief(briefText,settings),output=$('[data-brief-output]',root);
+ const run=$('[data-brief-run]',root);run.disabled=busy;run.innerHTML=busy?`${icon('clock',16)} ${briefRuntime.phase==='loading'?'Loading model…':briefRuntime.phase==='removing'?'Removing files…':'Reading priority…'}`:`${briefRuntime.loaded?'Interpret planning request':'Load model & interpret'} ${icon('arrow',16)}`;
+ $('#planning-brief',root).disabled=busy;root.querySelectorAll('[data-action="brief-example"],.brief-rules').forEach(e=>e.disabled=busy);
+ $('.brief-download',root).textContent=briefRuntime.loaded?'Model ready · The brief stays on this device.':'About 50 MB on first use, including a 23 MB model.';
+ $('.brief-runtime-status',root).textContent=briefRuntime.message;
+ $('.brief-stop',root).hidden=!['loading','interpreting'].includes(briefRuntime.phase);
+ $('.brief-model-controls',root).hidden=busy;root.querySelector('[data-action=brief-unload]').disabled=!briefRuntime.loaded;
+ const progress=$('.brief-file-progress',root);progress.hidden=briefRuntime.progress===null||!busy;progress.querySelector('progress').value=briefRuntime.progress||0;
+ const priorityFocus=document.activeElement?.matches('[data-action=brief-priority]')?document.activeElement.dataset.value:null;
+ output.innerHTML=briefOutput({result:briefResult,choice:briefChoice,current:briefCurrent(briefText,settings,briefResult),errors:briefAttempt?parsed.errors:[]},icon);
+ if(priorityFocus)output.querySelector(`[data-action=brief-priority][data-value="${priorityFocus}"]`)?.focus({preventScroll:true});
+}
+function openInbox(){showDialog('Notifications',inboxView(notices,inboxFilter,icon,saved),{type:'notifications',className:'notifications-dialog',overline:'VALENCEPORT / YOUR PLANNING WORK'});}
+function refreshInbox(){if(modal==='notifications'){const scroll=$('.inbox-list')?.scrollTop||0;const focused=document.activeElement?.closest('[data-action]');const focusData=focused?{action:focused.dataset.action,id:focused.dataset.id,value:focused.dataset.value}:null;const current=$('.dialog-content.inbox-intro');if(current){const node=document.createElement('template');node.innerHTML=inboxView(notices,inboxFilter,icon,saved);const dialog=$('.notifications-dialog');dialog.querySelectorAll(':scope > :not(.dialog-header)').forEach(n=>n.remove());dialog.append(node.content);$('.inbox-list').scrollTop=scroll;if(focusData){const target=[...dialog.querySelectorAll('[data-action]')].find(n=>!n.disabled&&n.dataset.action===focusData.action&&n.dataset.id===focusData.id&&n.dataset.value===focusData.value)||dialog.querySelector('[data-action=notice-filter]');target?.focus({preventScroll:true});}}}refreshBell();}
+
 function corridorDetails(){
  const r=selected();
  const descriptions={suez:'Yangshan → Singapore → Malacca → Bab-el-Mandeb → Suez → Gibraltar → Rotterdam',cape:'Yangshan → Singapore → Malacca → Cape of Good Hope → Rotterdam',eco:'Yangshan → Singapore → Suez → Rotterdam',rail:'Shanghai → Xi’an → Lanzhou → Urumqi → Khorgos → Kazakhstan → Kuryk → Alat → Tbilisi → Kars → Istanbul → Europe → Rotterdam',seaair:'Yangshan → Singapore → Jebel Ali → road to Dubai World Central (DWC) → Amsterdam → road to Rotterdam',air:'Shanghai Pudong (PVG) → Amsterdam Schiphol (AMS) → road to Rotterdam'};
@@ -520,6 +562,27 @@ document.addEventListener("click", (event) => {
     value = el.dataset.value;
   const record = saved.find(record=>record.id===el.dataset.id);
   flushScenarioUpdates();
+  if(action==='planning-brief'){openPlanningBrief();return;}
+  if(action==='brief-example'){briefText=value==='carbon'?CARBON_BRIEF:EXAMPLE_BRIEF;$('#planning-brief').value=briefText;briefResult=null;briefChoice=null;briefAttempt=false;refreshBrief();return;}
+  if(action==='brief-priority'){briefChoice=value;refreshBrief();return;}
+  if(action==='brief-rules'){briefText=$('#planning-brief').value;const parsed=parseBrief(briefText,settings);briefAttempt=true;briefResult=parsed.valid?{parsed,fingerprint:parsed.fingerprint,priority:null,mode:'rules'}:null;briefChoice=null;refreshBrief();return;}
+  if(action==='brief-stop'||action==='brief-unload'){briefResult=null;briefChoice=null;briefEngine?.stop(action==='brief-stop'?'Interpretation stopped. You can retry.':undefined);return;}
+  if(action==='brief-remove'){briefResult=null;briefChoice=null;briefEngine?.removeModel();return;}
+  if(action==='brief-apply'){
+   if(!briefCurrent(briefText,settings,briefResult)){refreshBrief();return;}
+   const preview=briefPreview(briefResult.parsed,briefChoice||briefResult.priority);if(!preview)return;
+   settings=preview.settings;pushNotice(notice('brief',{routeId:settings.selected,title:'Planning brief applied to the workspace',detail:`Budget ${money(settings.budget)}, arrival by ${dateLabel(settings.deadline)}, CO₂e up to ${settings.emissions} t. Priority: ${settings.priority}. Saved scenarios were not changed.`}));
+   store();closeDialog();view='planner';chartMode='map';history.pushState({},'',appUrl());render();window.scrollTo({top:0,behavior:'instant'});toast('Preview applied. Review the route before saving your own rationale.');return;
+  }
+  if(action==='notifications'){openInbox();return;}
+  if(action==='notice-filter'){inboxFilter=value==='unread'?'unread':'all';refreshInbox();return;}
+  if(action==='notice-read-all'){notices=markNotice(notices,'all');store();refreshInbox();return;}
+  if(action==='notice-toggle'){const item=notices.find(n=>n.id===el.dataset.id);if(item){notices=markNotice(notices,item.id,!item.read);store();refreshInbox();}return;}
+  if(action==='notice-open'){
+   const item=notices.find(n=>n.id===el.dataset.id);if(!item)return;notices=markNotice(notices,item.id);store();closeDialog();
+   if(item.scenarioId){const record=saved.find(r=>r.id===item.scenarioId);if(record){showDialog('Saved assumptions',assumptionsView(record,settings,icon));return;}toast('That saved scenario is no longer in the collection.');}
+   if(item.routeId){settings.selected=item.routeId;view='planner';chartMode='map';history.pushState({},'',appUrl());store();render();window.scrollTo({top:0,behavior:'instant'});}else{view='saved';history.pushState({},'',appUrl('#saved'));render();}return;
+  }
   if(action==='profile'){presetMenu.close();profileMenu.toggle(el);return;}
   if(action==='preset-menu'){profileMenu.close();presetMenu.toggle(el);return;}
   presetMenu.close(true);
@@ -527,7 +590,7 @@ document.addEventListener("click", (event) => {
   if(action==='shortcuts'){shortcuts();return;}
   if(action==='corridor-advisory'){showDialog('Strait of Hormuz',advisoryDialog(icon),{type:'advisory',overline:'CORRIDOR NOTICE / DATED REFERENCE'});return;}
   if(action==='inspect-advisory-route'){closeDialog();settings.selected='seaair';chartMode='map';activeLeg=0;store();render();return;}
-  if(action==='toggle-navigation'){navigationHidden=!navigationHidden;try{localStorage.setItem('vp-navigation-hidden',JSON.stringify(navigationHidden));}catch{}syncNavigation();return;}
+  if(action==='toggle-navigation'){navigationHidden=!navigationHidden;try{if(!isolated)localStorage.setItem('vp-navigation-hidden',JSON.stringify(navigationHidden));}catch{}syncNavigation();return;}
   if(action==='case-route'){if(['suez','cape','rail'].includes(value)){caseState.route=value;render();}return;}
   if(action==='case-scene'){if(['compare','stress','record'].includes(value)){caseState.scene=value;render();}return;}
   if(action==='case-delay'){caseState.delay=value==='7'?7:0;render();return;}
@@ -576,7 +639,7 @@ document.addEventListener("click", (event) => {
   if(action==='undo-delete'&&recentlyDeleted){if(saved.some(record=>record.id===recentlyDeleted.record.id)){recentlyDeleted=null;render();toast('That scenario is already in your collection.');return;}if(saved.length>=MAX_SCENARIOS){toast('Remove a scenario to make room before undoing.');return;}saved.splice(recentlyDeleted.index,0,recentlyDeleted.record);recentlyDeleted=null;store();render();return;}
   if(action==='export-backup'){try{download('ValencePort_scenarios.json',createBackup(saved),'application/json');toast('Scenario backup exported.');}catch(error){toast(error.message);}return;}
   if(action==='import-backup'){if(modal)closeDialog();$('#scenario-backup').click();return;}
-  if(action==='confirm-import'&&pendingImport){saved.push(...pendingImport.additions);pendingImport=null;recentlyDeleted=null;collectionQuery='';starredOnly=false;store();closeDialog();view='saved';history.pushState({}, "", appUrl("#saved"));render();toast('Scenario collection imported.');return;}
+  if(action==='confirm-import'&&pendingImport){pushNotice(notice('import',{title:'Scenario collection imported',detail:`${pendingImport.additions.length} new planning records added. Existing snapshots were kept.`}));saved.push(...pendingImport.additions);pendingImport=null;recentlyDeleted=null;collectionQuery='';starredOnly=false;store();closeDialog();view='saved';history.pushState({}, "", appUrl("#saved"));render();toast('Scenario collection imported.');return;}
   if (action === "nav") {
     event.preventDefault();
     if (modal) closeDialog();
@@ -730,7 +793,7 @@ document.addEventListener("click", (event) => {
     theme = theme === "dark" ? "light" : "dark";
     document.documentElement.dataset.theme = theme;
     try {
-      localStorage.setItem("vp-theme", JSON.stringify(theme));
+      if(!isolated)localStorage.setItem("vp-theme", JSON.stringify(theme));
     } catch {}
     el.innerHTML = icon(theme === "dark" ? "sun" : "moon", 17);
   } else if (action === "export") exportRoutes();
@@ -759,6 +822,7 @@ document.addEventListener("click", (event) => {
     saved = [];
     recentlyDeleted=null;collectionQuery="";starredOnly=false;
     settings = { ...DEFAULTS };
+    notices=initialNotices(settings);lastNoticeSettings={...settings};
     store();
     closeDialog();
     render();
@@ -767,6 +831,7 @@ document.addEventListener("click", (event) => {
 });
 document.addEventListener("input", (event) => {
   const el = event.target;
+  if(el.id==='planning-brief'){briefText=el.value;briefResult=null;briefChoice=null;refreshBrief();}
   if(el.matches('[data-focus="collection-search"]')){collectionQuery=el.value;render();}
   if (el.matches('[data-focus="search"]')) {
     settings.query = el.value;
@@ -804,6 +869,7 @@ document.addEventListener("change", (event) => {
   }
 });
 document.addEventListener("submit", (event) => {
+  if(event.target.id==='planning-brief-form'){event.preventDefault();briefText=$('#planning-brief').value;briefAttempt=true;const parsed=parseBrief(briefText,settings);briefResult=null;briefChoice=null;if(parsed.valid)briefEngine.interpret(parsed);else refreshBrief();return;}
   if(event.target.id==='rename-form'){event.preventDefault();try{const form=new FormData(event.target);saved=updateScenario(saved,form.get('scenarioId'),{title:form.get('title')});store();closeDialog();render();toast('Scenario renamed.');}catch(error){toast(error.message);}}
 
   if (event.target.id === "constraints-form") {
@@ -832,6 +898,7 @@ document.addEventListener("submit", (event) => {
         form.get("reason"),
       );
       saved.push({...d,title,starred:false});
+      pushNotice(notice('saved',{routeId:d.routeId,scenarioId:d.id,title:'Scenario saved for review',detail:`${title} · ${money(d.cost)}, arrival ${dateLabel(d.arrival)}, ${d.co2.toFixed(1)} t CO₂e. Your rationale is kept with this snapshot.`}));
       const persisted = store();
       closeDialog();
       render();
@@ -865,7 +932,7 @@ document.addEventListener("keydown", (event) => {
   if (event.key === "Tab" && modal) {
     const focusables = [
       ...$(".dialog").querySelectorAll(
-        "a[href],button:not([disabled]),input,select,textarea",
+        "a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),summary",
       ),
     ].filter((el) => el.getClientRects().length);
     if (!focusables.length) return;
@@ -900,7 +967,18 @@ window.addEventListener("popstate", () => {
 });
 if (["#saved", "#history"].includes(location.hash))
   view = location.hash.slice(1);
+if(isolated){
+ const scene=launchParams.get('scene');
+ if(['alerts','inbox'].includes(scene)){const before={...settings};settings=validateSettings({...settings,delay:7});notices=[...planningNotices(before,settings),...notices];lastNoticeSettings={...settings};}
+ if(scene==='tradeoffs')chartMode='tradeoffs';
+ if(scene==='journey')chartMode='journey';
+}
 shell();
+if(launchParams.get('scene')==='brief'||launchParams.has('brief'))openPlanningBrief();
+if(launchParams.get('scene')==='inbox')openInbox();
+if(launchParams.get('scene')==='comparison')compareDialog(['suez','cape','rail']);
+if(launchParams.get('scene')==='rationale')saveDialog();
+if(view==='case'&&location.hash){Promise.resolve(document.fonts.ready).then(()=>requestAnimationFrame(()=>document.getElementById(location.hash.slice(1))?.scrollIntoView({block:'start',behavior:'instant'})));}
 compactViewport.addEventListener('change', () => {
   syncNavigation();
   render();

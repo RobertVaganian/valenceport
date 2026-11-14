@@ -9,20 +9,21 @@
 
   **A clearer route forward.**
 
-  Freight scenario planning · Product design & working prototype  
+  Freight scenario planning · Product design & working prototype<br>
   Designed by **Robert Vaganian**
 
-  [![Release](https://img.shields.io/badge/version-1.9.0-435f56?style=flat)](package.json)
+  [![Release](https://img.shields.io/badge/version-2.0.0-435f56?style=flat)](package.json)
   [![JavaScript](https://img.shields.io/badge/JavaScript-ES_modules-435f56?style=flat)](dist/app.js)
   [![Node](https://img.shields.io/badge/Node-%E2%89%A522-435f56?style=flat)](package.json)
-  [![Runtime dependencies](https://img.shields.io/badge/runtime_dependencies-0-435f56?style=flat)](package.json)
-  [![Tests](https://img.shields.io/badge/behavior_tests-90-435f56?style=flat)](tests/)
+  [![On-device AI](https://img.shields.io/badge/AI-on_device-435f56?style=flat)](#on-device-ai-from-a-brief-to-a-plan)
+  [![Tests](https://img.shields.io/badge/behavior_tests-118-435f56?style=flat)](tests/)
   [![Responsive](https://img.shields.io/badge/responsive-desktop_%C2%B7_tablet_%C2%B7_mobile-435f56?style=flat)](#desktop-to-mobile)
 
   [Open the prototype](https://robertvaganian.github.io/valenceport/) ·
   [Case study](https://robertvaganian.github.io/valenceport/case-study/) ·
+  [Try local AI](https://robertvaganian.github.io/valenceport/?brief=1) ·
   [Run locally](#run-locally) ·
-  [Design decisions](#design-decisions)
+  [Why this design](#why-i-designed-it-this-way)
 
 </div>
 
@@ -40,64 +41,78 @@ Six views from the working prototype, in light and dark themes. Select any scree
   <tr>
     <td width="50%" valign="top">
       <strong>01 · Route planning</strong><br><br>
-      <a href="docs/screenshots/01-planner-dark.jpg?v=clean-1"><img src="docs/screenshots/01-planner-dark.jpg?v=clean-1" alt="Map the selected corridor against its baseline." width="440"></a><br>
+      <a href="docs/screenshots/01-planner-dark.jpg?v=2"><img src="docs/screenshots/01-planner-dark.jpg?v=2" alt="Map the selected corridor against its baseline." width="440"></a><br>
       <sub>Map the selected corridor against its baseline.</sub>
     </td>
     <td width="50%" valign="top">
       <strong>02 · Cost and time</strong><br><br>
-      <a href="docs/screenshots/02-tradeoffs-light.jpg?v=clean-1"><img src="docs/screenshots/02-tradeoffs-light.jpg?v=clean-1" alt="See the deadline, budget and emissions trade-off." width="440"></a><br>
+      <a href="docs/screenshots/02-tradeoffs-light.jpg?v=2"><img src="docs/screenshots/02-tradeoffs-light.jpg?v=2" alt="See the deadline, budget and emissions trade-off." width="440"></a><br>
       <sub>See the deadline, budget and emissions trade-off.</sub>
     </td>
   </tr>
   <tr>
     <td width="50%" valign="top">
       <strong>03 · Planned journey</strong><br><br>
-      <a href="docs/screenshots/03-journey-dark.jpg?v=clean-1"><img src="docs/screenshots/03-journey-dark.jpg?v=clean-1" alt="Inspect the stages behind an arrival estimate." width="440"></a><br>
+      <a href="docs/screenshots/03-journey-dark.jpg?v=2"><img src="docs/screenshots/03-journey-dark.jpg?v=2" alt="Inspect the stages behind an arrival estimate." width="440"></a><br>
       <sub>Inspect the stages behind an arrival estimate.</sub>
     </td>
     <td width="50%" valign="top">
       <strong>04 · Compare alternatives</strong><br><br>
-      <a href="docs/screenshots/04-comparison-light.jpg?v=clean-1"><img src="docs/screenshots/04-comparison-light.jpg?v=clean-1" alt="Read costs, arrival and emissions side by side." width="440"></a><br>
+      <a href="docs/screenshots/04-comparison-light.jpg?v=2"><img src="docs/screenshots/04-comparison-light.jpg?v=2" alt="Read costs, arrival and emissions side by side." width="440"></a><br>
       <sub>Read costs, arrival and emissions side by side.</sub>
     </td>
   </tr>
   <tr>
     <td width="50%" valign="top">
       <strong>05 · Preserve the rationale</strong><br><br>
-      <a href="docs/screenshots/05-rationale-dark.jpg?v=clean-1"><img src="docs/screenshots/05-rationale-dark.jpg?v=clean-1" alt="Keep the assumptions and reason with the plan." width="440"></a><br>
+      <a href="docs/screenshots/05-rationale-dark.jpg?v=2"><img src="docs/screenshots/05-rationale-dark.jpg?v=2" alt="Keep the assumptions and reason with the plan." width="440"></a><br>
       <sub>Keep the assumptions and reason with the plan.</sub>
     </td>
     <td width="50%" valign="top">
       <strong>06 · Inside the design</strong><br><br>
-      <a href="docs/screenshots/06-case-study-light.jpg?v=clean-1"><img src="docs/screenshots/06-case-study-light.jpg?v=clean-1" alt="Explore the product decisions in an interactive case study." width="440"></a><br>
+      <a href="docs/screenshots/06-case-study-light.jpg?v=2"><img src="docs/screenshots/06-case-study-light.jpg?v=2" alt="Explore the product decisions in an interactive case study." width="440"></a><br>
       <sub>Explore the product decisions in an interactive case study.</sub>
     </td>
   </tr>
 </table>
 
-## Desktop to mobile
+## On-device AI: from a brief to a plan
 
-Open ValencePort on a desktop, tablet or phone — directly in the browser, with no installation. The workspace adapts to the available space, keeping route planning, scenario testing and saved decisions within reach.
+**“Stay under EUR 22,000, arrive by 14 December; getting there sooner matters most.”**
 
-| On a phone | How the workspace adapts |
+The **AI · Planning brief** button turns that request into a preview: explicit limits with their source quotes, a suggested priority and a calculated route. Change the priority or apply the preview when ready. Saving still requires your own reason for the decision.
+
+[![Local planning brief with an arrival-first suggestion and a Middle Corridor preview](docs/screenshots/07-planning-brief-light.jpg?v=2)](docs/screenshots/07-planning-brief-light.jpg?v=2)
+
+| Part of the request | What handles it |
 | --- | --- |
-| Route options | Readable cards replace the wide table; comparisons stack vertically. |
-| The map | A dedicated full-screen view supports dragging and pinch-to-zoom. |
-| Everyday controls | Bottom navigation, larger tap targets and compact forms suit smaller screens. |
+| Preference expressed in words | A small MiniLM model suggests arrival, cost, emissions or balanced priority. |
+| Budget, deadline and CO₂e limit | Explicit parsing, with source quotes and validation. |
+| Route eligibility, prices and arrival | The same calculation model as the workspace. |
+| Applying the plan | The planner, after reviewing the preview. |
 
-Light and dark themes carry across screen sizes. [Try it on your phone →](https://robertvaganian.github.io/valenceport/)
+No account, API key or paid inference. First use downloads about **50 MB**, including a 23 MB model, from Hugging Face and jsDelivr. Inference runs on the device; the brief is not sent to an inference endpoint. Unclear priorities require a choice. Unsupported numeric instructions are blocked. A labelled **rules-only preview** is available without loading AI.
+
+[How the local model works →](docs/local-intelligence.md)
+
+## Notifications with somewhere useful to go
+
+Add **seven days of port delay** in Scenario lab. Suez misses the deadline, the leading eligible option changes, and both events appear behind the bell. The unread count, All/Unread filters and read controls help track the changes.
+
+[![Planning notifications after a seven-day delay](docs/screenshots/08-notifications-light.jpg?v=2)](docs/screenshots/08-notifications-light.jpg?v=2)
+
+A route event opens the current plan. A saved-scenario event opens its original assumptions. Earlier notifications never silently restore old limits. These are browser-local planning events, with the latest 50 retained; they are not carrier push alerts.
 
 ## A planning session
 
-1. **Set the limits.** Keep budget, deadline and emissions visible beside the shipment.
-2. **Find the eligible routes.** Compare ocean, rail, sea–air and air options. Priority controls rank the routes within each eligibility group.
-3. **Inspect the compromise.** Select a corridor on the map, compare up to three options, or inspect its journey stages. A pinned baseline gives the differences a consistent reference.
-4. **Test the assumptions.** Adjust fuel cost and port delay. The inspector shows what changed for the same route, including when it stops meeting the limits.
-5. **Save the reasoning.** Name an eligible scenario and explain the choice. Reopen its assumptions later, or export a comparison, brief or JSON backup.
+1. **Set the limits**, directly or through a planning brief.
+2. **Compare eligible routes**, inspect their journey and pin a baseline.
+3. **Test fuel and delay assumptions**; follow the changes in the inspector and notifications.
+4. **Save the reason**, keeping the route, limits and assumptions together. Export a comparison or JSON backup when needed.
 
-For example, adding seven days of port delay moves the Suez arrival from 10 to 17 December. It misses the 14 December deadline; the Middle Corridor remains eligible. The recommendation follows the changed constraints.
+On phones, cards replace the wide table, comparisons stack and the map has a dedicated full-screen view. Bottom navigation keeps the workspace within reach. Light and dark themes share the same hierarchy.
 
-## Design decisions
+## Why I designed it this way
 
 ### Eligibility comes before preference
 
@@ -127,12 +142,12 @@ Open **http://127.0.0.1:8080**. The interactive case study is at **http://127.0.
 npm run check
 ```
 
-This checks JavaScript syntax and runs the 90 behavior tests. Serve the app through HTTP; opening `dist/index.html` directly does not load its modules correctly.
+This checks JavaScript syntax and runs the 118 behavior tests. Serve the app through HTTP; opening `dist/index.html` directly does not load its modules correctly.
 
 <details>
 <summary><strong>Implementation, calculations and data sources</strong></summary>
 
-The application uses HTML, CSS and JavaScript modules with no runtime package dependencies. The `dist/` directory contains the editable application, not an opaque generated bundle.
+The application uses HTML, CSS and JavaScript modules without a build step. Core planning works without third-party runtime downloads. Optional local AI loads a pinned Transformers.js runtime and model only after an explicit action. The `dist/` directory contains the editable application, not an opaque generated bundle.
 
 | Area | Entry points |
 | --- | --- |
@@ -140,6 +155,8 @@ The application uses HTML, CSS and JavaScript modules with no runtime package de
 | Map, geometry and camera movement | [`dist/route-map.mjs`](dist/route-map.mjs), [`dist/map-camera.mjs`](dist/map-camera.mjs) |
 | Fuel and delay assumptions | [`dist/scenario-lab.mjs`](dist/scenario-lab.mjs) |
 | Saved records and backup validation | [`dist/workspace-model.mjs`](dist/workspace-model.mjs) |
+| Local planning brief | [`dist/brief-model.mjs`](dist/brief-model.mjs), [`dist/brief-worker.mjs`](dist/brief-worker.mjs) |
+| Planning notifications | [`dist/notifications.mjs`](dist/notifications.mjs) |
 | Interactive product design case study | [`dist/case-editorial.mjs`](dist/case-editorial.mjs) |
 
 Checks cover ranking, calculations, saved snapshots, import validation, geography, route continuity, complete reveals and text/status contrast. See the [implementation notes](docs/implementation.md) for calculation rules and model boundaries.
@@ -154,6 +171,4 @@ A self-initiated portfolio concept by **[Robert Vaganian](https://github.com/Rob
 
 The case study explains design decisions and interface validation. No user research results or measured business impact are claimed.
 
-Natural Earth is public domain. SeaRoute uses Apache 2.0; OSM-derived network data and ADSB.lol observations use ODbL 1.0. Credits are included with the [route data](dist/assets/tracks/README.md); the self-hosted fonts include their [OFL licenses](dist/assets/fonts/README.md).
-
-
+MiniLM and Transformers.js use Apache 2.0; see the [local intelligence notes](docs/local-intelligence.md) for pinned sources. Natural Earth is public domain. SeaRoute uses Apache 2.0; OSM-derived network data and ADSB.lol observations use ODbL 1.0. Credits are included with the [route data](dist/assets/tracks/README.md); the self-hosted fonts include their [OFL licenses](dist/assets/fonts/README.md).

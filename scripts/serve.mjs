@@ -10,6 +10,7 @@ const server=createServer(async(req,res)=>{
  if(!['GET','HEAD'].includes(req.method)){res.writeHead(405);res.end();return;}
  try{
   const path=decodeURIComponent(new URL(req.url,'http://localhost').pathname);
+  if(path==='/__capture/'){const body=await readFile(new URL('./capture.html',import.meta.url));res.writeHead(200,{'Content-Type':'text/html; charset=utf-8','Cache-Control':'no-store'});res.end(body);return;}
   let file=resolve(root,`.${path}`);
   if(file!==root&&!file.startsWith(root+sep)){res.writeHead(403);res.end();return;}
   if((await stat(file)).isDirectory())file=resolve(file,'index.html');
