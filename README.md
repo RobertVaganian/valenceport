@@ -17,7 +17,7 @@
   [![Node](https://img.shields.io/badge/Node-%E2%89%A522-435f56?style=flat)](package.json)
   [![On-device AI](https://img.shields.io/badge/AI-on_device-435f56?style=flat)](#on-device-ai-from-a-brief-to-a-plan)
   [![Tests](https://img.shields.io/badge/behavior_tests-118-435f56?style=flat)](tests/)
-  [![Responsive](https://img.shields.io/badge/responsive-desktop_%C2%B7_tablet_%C2%B7_mobile-435f56?style=flat)](#desktop-to-mobile)
+  [![Responsive](https://img.shields.io/badge/responsive-desktop_%C2%B7_tablet_%C2%B7_mobile-435f56?style=flat)](#a-planning-session)
 
   [Open the prototype](https://robertvaganian.github.io/valenceport/) ·
   [Case study](https://robertvaganian.github.io/valenceport/case-study/) ·
