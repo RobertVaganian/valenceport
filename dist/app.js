@@ -11,7 +11,7 @@ import {planningLimitsForm,createPlanningControls} from './planning-controls.mjs
 import {createTourPlayback} from './tour-playback.mjs';
 import {createPresetMenu} from './preset-menu.mjs';
 import {createProfileMenu} from './profile-menu.mjs';
-import {caseStudyView} from './case-editorial.mjs?v=2.0.0';
+import {caseStudyView} from './case-editorial.mjs?v=2.0.1';
 import {guideView,guideFrame,guideSteps as tourSteps} from './guide.mjs?v=mobile-1';
 import {loadGeography} from './geography-base.mjs';
 import {
