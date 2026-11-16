@@ -28,8 +28,9 @@
 .brief-input-frame { position:relative; isolation:isolate; overflow:hidden; border-radius:9px; padding:1.5px; background:var(--line-strong); }
 .brief-input-frame::before, .brief-launch::before { content:""; position:absolute; inset:auto; left:-80%; top:50%; width:260%; aspect-ratio:1; transform:translateY(-50%); z-index:-1; background:conic-gradient(from 25deg,#d69e7d,#c48ab5,#9e94d6,#80b7d1,#8ab9a1,#c8bc80,#d69e7d); animation:brief-spectrum 16s linear infinite; pointer-events:none; }
 .brief-input-frame textarea { border:0; border-radius:7.5px; position:relative; min-height:172px; }
-.brief-input-frame:focus-within { box-shadow:0 0 0 1px var(--ring); }
-.brief-input-frame textarea:focus-visible { outline:2px solid var(--ring); outline-offset:-3px; }
+.brief-input-frame:focus-within { box-shadow:none; }
+.brief-input-frame textarea:focus, .brief-input-frame textarea:focus-visible { outline:none; box-shadow:none; }
+.brief-input-frame:focus-within::before { background:conic-gradient(from 25deg,light-dark(#9a593c,#e2aa86),light-dark(#934b7a,#d79bc6),light-dark(#6657ac,#b5a6ed),light-dark(#3b728a,#96c9e3),light-dark(#487b65,#a0cfb4),light-dark(#83753b,#d9cd95),light-dark(#9a593c,#e2aa86)); }
 .brief-launch { position:relative; isolation:isolate; overflow:hidden; border-color:transparent; background:transparent; }
 .brief-launch::after { content:""; position:absolute; inset:1px; border-radius:6px; background:var(--panel); z-index:-1; pointer-events:none; }
 .brief-launch>span:first-child { border:0; background:var(--hover); color:var(--text); }
@@ -38,6 +39,6 @@
 @keyframes brief-spectrum { to { transform:translateY(-50%) rotate(1turn); } }
 @media(max-width:700px) { .brief-input-frame textarea { min-height:150px; } }
 @media(prefers-reduced-motion:reduce) { .brief-input-frame::before, .brief-launch::before { animation:none; } }
-@media(forced-colors:active) { .brief-input-frame, .brief-launch { border:1px solid ButtonText; } .brief-input-frame::before, .brief-launch::before, .brief-launch::after { display:none; } }
+@media(forced-colors:active) { .brief-input-frame, .brief-launch { border:1px solid ButtonText; } .brief-input-frame::before, .brief-launch::before, .brief-launch::after { display:none; } .brief-input-frame:focus-within { border-color:Highlight; } }
 
 [data-capture=true] .brief-input-frame::before, [data-capture=true] .brief-launch::before { animation:none; }

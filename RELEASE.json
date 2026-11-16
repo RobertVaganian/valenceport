@@ -1,4 +1,4 @@
 {
-  "version": "2.1.0",
-  "summary": "Improve touch map navigation and compact rendering; highlight the local planning brief"
+  "version": "2.1.1",
+  "summary": "Keep a single spectral border while editing a planning brief"
 }
