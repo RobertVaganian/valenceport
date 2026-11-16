@@ -69,7 +69,8 @@ export function createJourneyPreview(getSettings,icon) {
       const next=document.querySelector('.map-stage > .route-map');
       if(nextSignature!==signature){pause();progress=0;signature=nextSignature;}
       if(!document.querySelector('.journey-player')||document.querySelector('.overlay'))pause();
-      bindMap(next);paint();
+      // Geometry sampling is needed only by a visible journey player.
+      bindMap(document.querySelector('.journey-player') ? next : null);paint();
     },
     toggle() {
       if(reduced.matches){progress=progress===1?0:nextPreviewStage(getSettings().selected,getSettings(),progress);paint();return;}

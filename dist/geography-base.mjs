@@ -1,7 +1,8 @@
 // Keep one persistent vector definition outside rerendered views. External SVG
 // <use> documents can be dropped by Chromium when their last instance is removed.
 let loaded;
-const geographyUrl = new URL('./assets/geography.svg', import.meta.url);
+const compact = typeof matchMedia === 'function' && matchMedia('(max-width:700px), (pointer:coarse)').matches;
+const geographyUrl = compact ? new URL('./assets/geography-compact.svg', import.meta.url) : new URL('./assets/geography.svg', import.meta.url);
 let prefix=geographyUrl.href+'#';
 export const geographyHref=id=>prefix+id;
 export function loadGeography(){

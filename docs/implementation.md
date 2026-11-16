@@ -96,3 +96,7 @@ Scenario presets use a keyboard-accessible popover with before/after assumptions
 ## Corridor notice
 
 A manually reviewed Hormuz notice records sources dated 6 November 2026, reviewed 7 November. It identifies the Dubai sea–air corridor and links to Maersk and IMO. It is a dated reference, not a live availability feed, and does not assign a modelled delay or surcharge. See [source notes](hormuz-advisory.md).
+
+## Compact map rendering
+
+Touch pan and pinch share the same bounded camera as mouse and keyboard navigation. Pointer updates are batched per frame; label collision layout waits for the gesture to settle. Compact screens use a simplified Natural Earth display layer, while route geometry and all planning calculations remain unchanged. See [mobile navigation notes](mobile-map.md).

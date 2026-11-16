@@ -29,7 +29,7 @@ ValencePort helps a freight planner compare six ways to move the same Shanghai�
 
 **The decision:** Cape costs **€16,880** but arrives five days late. Suez costs **€1,540 more** and arrives nine days earlier, within all three limits.
 
-[![ValencePort workspace: the selected corridor, pinned baseline and planning limits](docs/readme/overview.jpg?v=3)](docs/screenshots/01-planner-dark.jpg?v=2)
+[![ValencePort workspace: the selected corridor, pinned baseline and planning limits](docs/readme/overview.jpg?v=4)](docs/screenshots/01-planner-dark.jpg?v=4)
 
 ## Inside the workspace
 
@@ -37,12 +37,12 @@ Four details from the working prototype. Select an image to inspect the complete
 
 <table>
 <tr>
-<td width="50%" valign="top"><strong>01 · Follow the route</strong><br><br><a href="docs/screenshots/01-planner-dark.jpg?v=2"><img src="docs/readme/map.jpg?v=3" width="440" alt="Selected Suez corridor and the pinned Cape baseline on the route map"></a><br><sub>Keep the selected corridor and baseline in view.</sub></td>
-<td width="50%" valign="top"><strong>02 · Read the trade-off</strong><br><br><a href="docs/screenshots/02-tradeoffs-light.jpg?v=2"><img src="docs/readme/tradeoffs.jpg?v=3" width="440" alt="Cost and transit time plotted against the shipment budget and deadline"></a><br><sub>Compare the options against the same limits.</sub></td>
+<td width="50%" valign="top"><strong>01 · Follow the route</strong><br><br><a href="docs/screenshots/01-planner-dark.jpg?v=4"><img src="docs/readme/map.jpg?v=4" width="440" alt="Selected Suez corridor and the pinned Cape baseline on the route map"></a><br><sub>Keep the selected corridor and baseline in view.</sub></td>
+<td width="50%" valign="top"><strong>02 · Read the trade-off</strong><br><br><a href="docs/screenshots/02-tradeoffs-light.jpg?v=4"><img src="docs/readme/tradeoffs.jpg?v=4" width="440" alt="Cost and transit time plotted against the shipment budget and deadline"></a><br><sub>Compare the options against the same limits.</sub></td>
 </tr>
 <tr>
-<td width="50%" valign="top"><strong>03 · Inspect the journey</strong><br><br><a href="docs/screenshots/03-journey-dark.jpg?v=2"><img src="docs/readme/journey.jpg?v=3" width="440" alt="Planned journey stages and the arrival estimate for Suez"></a><br><sub>See the stages behind an arrival estimate.</sub></td>
-<td width="50%" valign="top"><strong>04 · Compare alternatives</strong><br><br><a href="docs/screenshots/04-comparison-light.jpg?v=2"><img src="docs/readme/comparison.jpg?v=3" width="440" alt="Suez, Cape and Middle Corridor compared on cost, transit, arrival and emissions"></a><br><sub>Read the complete compromise side by side.</sub></td>
+<td width="50%" valign="top"><strong>03 · Inspect the journey</strong><br><br><a href="docs/screenshots/03-journey-dark.jpg?v=4"><img src="docs/readme/journey.jpg?v=4" width="440" alt="Planned journey stages and the arrival estimate for Suez"></a><br><sub>See the stages behind an arrival estimate.</sub></td>
+<td width="50%" valign="top"><strong>04 · Compare alternatives</strong><br><br><a href="docs/screenshots/04-comparison-light.jpg?v=4"><img src="docs/readme/comparison.jpg?v=4" width="440" alt="Suez, Cape and Middle Corridor compared on cost, transit, arrival and emissions"></a><br><sub>Read the complete compromise side by side.</sub></td>
 </tr>
 </table>
 
@@ -52,7 +52,7 @@ Four details from the working prototype. Select an image to inspect the complete
 
 The **AI · Planning brief** button prepares a plan you can inspect: source-linked limits, a suggested priority and a calculated route. Review the interpretation, change the priority if needed, then apply it explicitly.
 
-[![A local planning brief with its source quotes, reviewed priority and calculated route](docs/readme/planning-brief.jpg?v=3)](docs/screenshots/07-planning-brief-light.jpg?v=3)
+[![A local planning brief with its source quotes, reviewed priority and calculated route](docs/readme/planning-brief.jpg?v=4)](docs/screenshots/07-planning-brief-light.jpg?v=4)
 
 The model interprets the preference in your wording. Explicit parsing handles the limits; the route model supplies prices, arrival and emissions. Saving a scenario still needs your own reason.
 
@@ -78,6 +78,10 @@ Save an eligible scenario with its explanation, constraints and baseline. Its as
 
 IBM Plex Sans supports the dense interface; Archivo gives the headings their compact character. Warm stone surfaces, light and dark themes, and a responsive card layout keep the same hierarchy across screen sizes.
 
+## On a phone
+
+Pinch to zoom, then drag the map with one finger. Fit returns to the complete corridor; Expand keeps the same camera in a larger view. Scroll outside the map to move through the planner. Compact screens load a smaller display layer; route positions and planning calculations stay the same.
+
 ## Run locally
 
 Requires **Node.js 22+**. No dependency installation is needed.
@@ -88,7 +92,7 @@ cd valenceport
 npm run dev
 ```
 
-Open **http://127.0.0.1:8080**. Run `npm run check` for syntax checks and the 118 behavior tests.
+Open **http://127.0.0.1:8080**. Run `npm run check` for syntax checks and the 128 behavior tests.
 
 <details>
 <summary><strong>Implementation, data and scope</strong></summary>

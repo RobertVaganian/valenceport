@@ -1,5 +1,6 @@
 const reduced = () =>
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const compact = () => window.matchMedia("(max-width: 700px), (pointer: coarse)").matches;
 const easing = "cubic-bezier(.2,.75,.25,1)";
 let cleanups = [];
 
@@ -8,6 +9,7 @@ export function captureMotion(root, context) {
   cleanups.forEach((stop) => stop());
   cleanups = [];
   if (!root || reduced()) return { context };
+  if (compact()) return { context, compact: true };
   return {
     context,
     panel: root.querySelector('.map-panel')?.getBoundingClientRect().toJSON(),
@@ -48,6 +50,15 @@ export function captureMotion(root, context) {
 export function playMotion(root, before, context) {
   if (!root || reduced()) return;
   const previous = before?.context;
+  if (before?.compact) {
+    // Never duplicate or crossfade the vector atlas on compact/touch screens.
+    const element = previous?.view !== context.view ? root : root.querySelector('.planning-selection');
+    if (element) {
+      const animation = element.animate([{ opacity: .65 }, { opacity: 1 }], { duration: 160, easing });
+      cleanups.push(() => animation.cancel());
+    }
+    return;
+  }
   const animate = (el, frames, duration = 240) => {
     if (!el) return;
     const animation = el.animate(frames, { duration, easing });

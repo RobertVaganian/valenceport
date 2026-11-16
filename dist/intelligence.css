@@ -23,3 +23,21 @@
 @media(max-width:1000px){.brief-launch{width:38px;padding:0}.brief-launch>span:last-child{display:none}}
 @media(max-width:700px){.brief-launch{height:42px;min-height:42px;width:42px}.brief-launch>span:first-child{width:25px;height:25px;flex-basis:25px}.planning-brief-dialog .dialog-header{padding:19px 20px}.brief-grid{padding:20px;gap:0}.brief-input{padding-right:0}.brief-welcome{padding:0}.brief-limits>div{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:12px;align-items:baseline}.brief-limits dd{font-size:15px}.brief-priority button{min-height:44px}.brief-route-metrics>span{align-items:baseline}.brief-run,.brief-route>.button{white-space:normal;text-align:center}.brief-footer>span{max-width:100%}}
 .brief-result>h3{scroll-margin-block-start:38px}
+
+/* Restrained spectral accents identify the local planning tool. */
+.brief-input-frame { position:relative; isolation:isolate; overflow:hidden; border-radius:9px; padding:1.5px; background:var(--line-strong); }
+.brief-input-frame::before, .brief-launch::before { content:""; position:absolute; inset:auto; left:-80%; top:50%; width:260%; aspect-ratio:1; transform:translateY(-50%); z-index:-1; background:conic-gradient(from 25deg,#d69e7d,#c48ab5,#9e94d6,#80b7d1,#8ab9a1,#c8bc80,#d69e7d); animation:brief-spectrum 16s linear infinite; pointer-events:none; }
+.brief-input-frame textarea { border:0; border-radius:7.5px; position:relative; min-height:172px; }
+.brief-input-frame:focus-within { box-shadow:0 0 0 1px var(--ring); }
+.brief-input-frame textarea:focus-visible { outline:2px solid var(--ring); outline-offset:-3px; }
+.brief-launch { position:relative; isolation:isolate; overflow:hidden; border-color:transparent; background:transparent; }
+.brief-launch::after { content:""; position:absolute; inset:1px; border-radius:6px; background:var(--panel); z-index:-1; pointer-events:none; }
+.brief-launch>span:first-child { border:0; background:var(--hover); color:var(--text); }
+.brief-launch:hover::after { background:var(--hover); }
+.brief-launch::before { animation-duration:24s; }
+@keyframes brief-spectrum { to { transform:translateY(-50%) rotate(1turn); } }
+@media(max-width:700px) { .brief-input-frame textarea { min-height:150px; } }
+@media(prefers-reduced-motion:reduce) { .brief-input-frame::before, .brief-launch::before { animation:none; } }
+@media(forced-colors:active) { .brief-input-frame, .brief-launch { border:1px solid ButtonText; } .brief-input-frame::before, .brief-launch::before, .brief-launch::after { display:none; } }
+
+[data-capture=true] .brief-input-frame::before, [data-capture=true] .brief-launch::before { animation:none; }

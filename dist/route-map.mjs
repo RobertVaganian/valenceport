@@ -1,4 +1,4 @@
-import {geographyHref} from './geography-base.mjs';
+import {geographyHref} from './geography-base.mjs?v=mobile-2';
 import {CASPIAN_FERRY,OBSERVED_KL896,AMS_ROAD,DUBAI_ROAD} from './network-tracks.mjs';
 import {greatCircle,TERMINALS} from './maritime-paths.mjs';
 import {DUBAI_FLIGHT} from './maritime-paths.mjs';

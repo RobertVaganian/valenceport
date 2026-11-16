@@ -1,5 +1,5 @@
 import {ROUTES,DEFAULTS,evaluate,rankRoutes,money,dateLabel} from './model.mjs';
-import {routeMap} from './route-map.mjs';
+import {routeMap} from './route-map.mjs?v=mobile-2';
 export const guideSteps=[
  {title:'Choose a route. See the trade-off.',label:'Choose',copy:'The solid line is the selected corridor. Switching from Cape to Suez costs €1,540 more and arrives nine days earlier.',tip:'Use Routes on the map or select a name in the route options.',cues:['Start with the current Cape plan.','Select Suez Canal in Routes.','Read the updated cost, arrival and planning status.']},
  {title:'Edit a limit. Recheck the options.',label:'Set limits',copy:'Lowering the budget from €22,000 to €19,000 leaves Suez eligible. The Middle Corridor now exceeds the budget.',tip:'Budget, deadline and emissions are editable in the planning-limits bar.',cues:['Budget is €22,000. Two routes meet all three limits.','Open Budget, enter €19,000 and apply it.','One route remains eligible. Rail is €2,860 above the new budget.']},

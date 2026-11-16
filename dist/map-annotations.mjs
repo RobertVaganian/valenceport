@@ -1,5 +1,6 @@
 import {updateGeographicContext} from './geographic-context.mjs';
-import { layoutMapLabels } from './map-layout.mjs?v=mobile-1';
+import { layoutMapLabels } from './map-layout.mjs';
+const movements = new WeakMap();
 
 export function updateMapAnnotations(map,camera,active=null) {
   const bounds=map.getBoundingClientRect(),pixelScale=Math.min(bounds.width/1000,bounds.height/610);
@@ -35,6 +36,7 @@ export function updateMapAnnotations(map,camera,active=null) {
     const endX=Math.max(0,Math.min(item.width,-dx)),endY=Math.max(0,Math.min(item.height,-dy));
     label.querySelector('.label-leader').setAttribute('d',`M${-dx},${-dy} L${endX},${endY}`);
   }
+  movements.set(map, { pixelScale, nodes: nodes.map(node => ({ node, x: Number(node.dataset.mapX), y: Number(node.dataset.mapY) })) });
   updateGeographicContext(map,camera,pixelScale,layout.filter(item=>item.visible));
   // Geographic context yields to the port cards when the two would overlap.
   const cards=layout.filter(item=>item.visible);
@@ -45,4 +47,18 @@ export function updateMapAnnotations(map,camera,active=null) {
     text.style.visibility=cards.some(card=>x<card.x+card.width+5&&x+width>card.x-5&&y<card.y+card.height+5&&y+height>card.y-5)?'hidden':'';
   }
 
+}
+
+// During a gesture, keep existing label slots and move their anchors only.
+// Collision placement and geographic text measurement run once when it settles.
+export function moveMapAnnotations(map, camera) {
+  const cached = movements.get(map);
+  if (!cached) return updateMapAnnotations(map, camera);
+  const { pixelScale, nodes } = cached;
+  map.style.setProperty('--map-label-scale', String(1 / (pixelScale * camera.scale)));
+  for (const { node, x, y } of nodes) {
+    const px = camera.x + x * camera.scale, py = camera.y + y * camera.scale;
+    node.setAttribute('transform', `translate(${px},${py})`);
+    node.style.display = px * pixelScale < 6 || px * pixelScale > 1000 * pixelScale - 6 || py * pixelScale < 6 || py * pixelScale > 610 * pixelScale - 6 ? 'none' : '';
+  }
 }

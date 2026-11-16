@@ -369,3 +369,28 @@
   .planner-grid.map-wide .map-stage { flex:1; height:auto!important; }
   .planner-grid.map-wide .map-route-legend, .planner-grid.map-wide .map-focus-summary { display:none; }
 }
+
+/* The map owns its gestures; the surrounding planner retains page scrolling. */
+.map-stage > .route-map { touch-action:none; }
+.map-touch-hint { display:none; }
+.route-map.is-navigating .geographic-annotations { opacity:0; transition:none; }
+.route-map.is-navigating .route-reveal-mask { stroke-width:28; }
+@media(max-width:700px), (pointer:coarse) {
+  .map-touch-hint { display:block; position:absolute; left:12px; bottom:10px; max-width:110px; font-size:10px; line-height:1.5; color:var(--muted); pointer-events:none; }
+  .map-stage > .route-map { contain:paint; }
+  .map-route-legend, .map-location-card, .map-controls { backdrop-filter:none; }
+  .route-map .geo-label rect { filter:none; }
+  .route-map .land-layer { transition:none; }
+}
+
+@media(max-width:400px) {
+  .topbar { padding-inline:10px; gap:6px; }
+  .mobile-brand { font-size:18px; gap:7px; }
+  .mobile-brand img { width:27px; height:27px; }
+  .topbar-right { gap:4px; }
+  .topbar-right>.profile-trigger,.topbar-right>.icon-button,.topbar-right>.brief-launch { width:40px; min-width:40px; height:40px; min-height:40px; }
+  .map-touch-hint { max-width:calc(100% - 216px); }
+}
+@media(max-width:359px) { .topbar .mobile-brand { font-size:0; gap:0; } }
+
+@media(max-width:700px), (pointer:coarse) { .overlay { backdrop-filter:none; } }

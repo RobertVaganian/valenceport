@@ -1,9 +1,10 @@
 import {parseBrief,briefPreview,briefCurrent,EXAMPLE_BRIEF,CARBON_BRIEF} from './brief-model.mjs';
 import {createBriefRuntime} from './brief-runtime.mjs';
-import {briefDialog,briefOutput,inboxView} from './intelligence-views.mjs';
+import {briefDialog,briefOutput,inboxView} from './intelligence-views.mjs?v=mobile-2';
 import {notice,normaliseNotices,initialNotices,planningNotices,addNotice,unreadNotices,markNotice} from './notifications.mjs';
 const launchParams=new URLSearchParams(location.search);
 const isolated=launchParams.has('scene')||launchParams.has('capture');
+document.documentElement.dataset.capture = String(launchParams.has('capture'));
 import { appUrl, appPath } from './paths.mjs';
 import { compactComparison } from './mobile-workspace.mjs?v=mobile-1';
 import {advisoryDialog} from './corridor-advisory.mjs';
@@ -11,9 +12,9 @@ import {planningLimitsForm,createPlanningControls} from './planning-controls.mjs
 import {createTourPlayback} from './tour-playback.mjs';
 import {createPresetMenu} from './preset-menu.mjs';
 import {createProfileMenu} from './profile-menu.mjs';
-import {caseStudyView} from './case-editorial.mjs?v=2.0.1';
-import {guideView,guideFrame,guideSteps as tourSteps} from './guide.mjs?v=mobile-1';
-import {loadGeography} from './geography-base.mjs';
+import {caseStudyView} from './case-editorial.mjs?v=2.1.0';
+import {guideView,guideFrame,guideSteps as tourSteps} from './guide.mjs?v=mobile-2';
+import {loadGeography} from './geography-base.mjs?v=mobile-2';
 import {
   ROUTES,
   DEFAULTS,
@@ -30,13 +31,13 @@ import {
 } from "./model.mjs";
 
 import {scenarioImpact} from "./scenario-impact.mjs";
-import {plannerView} from "./planner-view.mjs?v=mobile-1";
+import {plannerView} from "./planner-view.mjs?v=mobile-2";
 import {mapReference,nextTableSort} from "./planner-model.mjs";
-import {createJourneyPreview,journeyPlayer} from "./journey-preview.mjs";
-import { captureMotion, playMotion } from "./motion.mjs";
+import {createJourneyPreview,journeyPlayer} from "./journey-preview.mjs?v=mobile-2";
+import { captureMotion, playMotion } from "./motion.mjs?v=mobile-2";
 import { syncWorkspaceLayout } from "./workspace-layout.mjs";
-import { createMapNavigation } from "./map-navigation.mjs?v=mobile-1";
-import { routeMap } from "./route-map.mjs";
+import { createMapNavigation } from "./map-navigation.mjs?v=mobile-2";
+import { routeMap } from "./route-map.mjs?v=mobile-2";
 import { routeLocations } from "./map-layout.mjs?v=mobile-1";
 import { geometryId } from "./route-geometry.mjs";
 import { routeComparisonCsv, timelineFor } from "./planning.mjs";
@@ -516,7 +517,7 @@ function shortcuts(){
 function about() {
   showDialog(
     "A workspace for better trade-offs",
-    `<div class="dialog-content about-content"><div class="about-brand">${mark}<h3>ValencePort</h3></div><p>Designed and built as a self-initiated product design concept by Robert Vaganian.</p><p>Explore a complete freight planning scenario: set limits, compare routes, test assumptions and save a decision. All operational data is fictional. Nothing is booked or sent to a carrier.</p><p>Version 1.9 · Saved scenarios stay in this browser. Export a backup to keep the whole collection, or a brief for one decision.</p><button class="button outline" data-action="corridor-details">${icon("layers",18)} Map sources & credits</button><button class="button outline danger" data-action="clear-data">${icon("reset", 15)} Reset demo workspace</button></div><footer class="dialog-footer"><button class="button quiet" data-action="nav" data-view="case">Read the case study ${icon("external", 14)}</button><button class="button primary" data-action="close">Back to workspace</button></footer>`,
+    `<div class="dialog-content about-content"><div class="about-brand">${mark}<h3>ValencePort</h3></div><p>Designed and built as a self-initiated product design concept by Robert Vaganian.</p><p>Explore a complete freight planning scenario: set limits, compare routes, test assumptions and save a decision. All operational data is fictional. Nothing is booked or sent to a carrier.</p><p>Version 2.1 · Saved scenarios stay in this browser. Export a backup to keep the whole collection, or a brief for one decision.</p><button class="button outline" data-action="corridor-details">${icon("layers",18)} Map sources & credits</button><button class="button outline danger" data-action="clear-data">${icon("reset", 15)} Reset demo workspace</button></div><footer class="dialog-footer"><button class="button quiet" data-action="nav" data-view="case">Read the case study ${icon("external", 14)}</button><button class="button primary" data-action="close">Back to workspace</button></footer>`,
     { type: "about" },
   );
 }
