@@ -42,3 +42,12 @@
 @media(forced-colors:active) { .brief-input-frame, .brief-launch { border:1px solid ButtonText; } .brief-input-frame::before, .brief-launch::before, .brief-launch::after { display:none; } .brief-input-frame:focus-within { border-color:Highlight; } }
 
 [data-capture=true] .brief-input-frame::before, [data-capture=true] .brief-launch::before { animation:none; }
+
+@media (max-width:700px) {
+  .topbar .brief-launch::before, .topbar .brief-launch::after { display:none; }
+  .topbar .brief-launch > span:first-child {
+    width:29px; height:29px; flex-basis:29px; border-radius:50%;
+    background:var(--selection-bg); color:var(--text);
+  }
+  .brief-input-frame::before { animation:none; }
+}
