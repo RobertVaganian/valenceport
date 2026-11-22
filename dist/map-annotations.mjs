@@ -36,7 +36,7 @@ export function updateMapAnnotations(map,camera,active=null) {
     const endX=Math.max(0,Math.min(item.width,-dx)),endY=Math.max(0,Math.min(item.height,-dy));
     label.querySelector('.label-leader').setAttribute('d',`M${-dx},${-dy} L${endX},${endY}`);
   }
-  movements.set(map, { pixelScale, nodes: nodes.map(node => ({ node, x: Number(node.dataset.mapX), y: Number(node.dataset.mapY) })) });
+  movements.set(map, { pixelScale, scale: camera.scale, nodes: nodes.map(node => ({ node, x: Number(node.dataset.mapX), y: Number(node.dataset.mapY) })) });
   updateGeographicContext(map,camera,pixelScale,layout.filter(item=>item.visible));
   // Geographic context yields to the port cards when the two would overlap.
   const cards=layout.filter(item=>item.visible);
@@ -55,10 +55,14 @@ export function moveMapAnnotations(map, camera) {
   const cached = movements.get(map);
   if (!cached) return updateMapAnnotations(map, camera);
   const { pixelScale, nodes } = cached;
-  map.style.setProperty('--map-label-scale', String(1 / (pixelScale * camera.scale)));
+  if (cached.scale !== camera.scale) {
+    cached.scale = camera.scale;
+    map.style.setProperty('--map-label-scale', String(1 / (pixelScale * camera.scale)));
+  }
   for (const { node, x, y } of nodes) {
     const px = camera.x + x * camera.scale, py = camera.y + y * camera.scale;
     node.setAttribute('transform', `translate(${px},${py})`);
-    node.style.display = px * pixelScale < 6 || px * pixelScale > 1000 * pixelScale - 6 || py * pixelScale < 6 || py * pixelScale > 610 * pixelScale - 6 ? 'none' : '';
+    const display = px * pixelScale < 6 || px * pixelScale > 1000 * pixelScale - 6 || py * pixelScale < 6 || py * pixelScale > 610 * pixelScale - 6 ? 'none' : '';
+    if (node.style.display !== display) node.style.display = display;
   }
 }

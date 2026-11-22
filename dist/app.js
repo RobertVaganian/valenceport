@@ -12,9 +12,9 @@ import {planningLimitsForm,createPlanningControls} from './planning-controls.mjs
 import {createTourPlayback} from './tour-playback.mjs';
 import {createPresetMenu} from './preset-menu.mjs';
 import {createProfileMenu} from './profile-menu.mjs';
-import {caseStudyView} from './case-editorial.mjs?v=2.1.0';
-import {guideView,guideFrame,guideSteps as tourSteps} from './guide.mjs?v=mobile-2';
-import {loadGeography} from './geography-base.mjs?v=mobile-2';
+import {caseStudyView} from './case-editorial.mjs?v=tablet-1';
+import {guideView,guideFrame,guideSteps as tourSteps} from './guide.mjs?v=tablet-1';
+import {loadGeography} from './geography-base.mjs?v=tablet-1';
 import {
   ROUTES,
   DEFAULTS,
@@ -31,13 +31,13 @@ import {
 } from "./model.mjs";
 
 import {scenarioImpact} from "./scenario-impact.mjs";
-import {plannerView} from "./planner-view.mjs?v=mobile-2";
+import {plannerView} from "./planner-view.mjs?v=tablet-1";
 import {mapReference,nextTableSort} from "./planner-model.mjs";
 import {createJourneyPreview,journeyPlayer} from "./journey-preview.mjs?v=mobile-2";
 import { captureMotion, playMotion } from "./motion.mjs?v=mobile-2";
 import { syncWorkspaceLayout } from "./workspace-layout.mjs";
-import { createMapNavigation } from "./map-navigation.mjs?v=mobile-2";
-import { routeMap } from "./route-map.mjs?v=mobile-2";
+import { createMapNavigation } from "./map-navigation.mjs?v=tablet-1";
+import { routeMap } from "./route-map.mjs?v=tablet-1";
 import { routeLocations } from "./map-layout.mjs?v=mobile-1";
 import { geometryId } from "./route-geometry.mjs";
 import { routeComparisonCsv, timelineFor } from "./planning.mjs";

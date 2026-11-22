@@ -1,4 +1,4 @@
-import { updateMapAnnotations, moveMapAnnotations } from './map-annotations.mjs?v=mobile-2';
+import { updateMapAnnotations, moveMapAnnotations } from './map-annotations.mjs?v=tablet-1';
 import { FIT_CAMERA, constrainCamera, zoomAt, wheelScale, cameraTransform } from './map-camera.mjs';
 import { createMapGesture, createFrameBatch } from './map-gesture.mjs?v=mobile-2';
 
@@ -10,7 +10,21 @@ export function createMapNavigation(getMap, getActiveLocation = () => null, onFi
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
   const staticMaps = new Set();
   const batch = createFrameBatch(camera => { current = camera; paint(true); });
-  const resizeObserver = new ResizeObserver(() => { cancelGesture(); sync(); });
+  const mapSizes = new WeakMap();
+  const resizeObserver = new ResizeObserver(entries => {
+    let plannerResized = false;
+    for (const { target: map, contentRect: { width, height } } of entries) {
+      const previous = mapSizes.get(map);
+      mapSizes.set(map, { width, height });
+      if (map === observedMap && (previous?.width !== width || previous?.height !== height)) {
+        if (previous) cancelGesture();
+        plannerResized = true;
+      } else if (staticMaps.has(map)) {
+        updateMapAnnotations(map, FIT_CAMERA);
+      }
+    }
+    if (plannerResized) paint(Boolean(gestureMap || wheelFrame || frame));
+  });
 
   function bind(map) {
     if (observedMap !== map) {
@@ -28,8 +42,9 @@ export function createMapNavigation(getMap, getActiveLocation = () => null, onFi
     if (!nodes?.map.isConnected) return;
     const { map, zoom, output, out, into } = nodes;
     zoom?.setAttribute('transform', `translate(${current.x} ${current.y}) scale(${current.scale})`);
-    map.dataset.zoomed = String(current.scale > 1.01);
-    map.dataset.zoom = current.scale.toFixed(3);
+    const zoomed = String(current.scale > 1.01), scale = current.scale.toFixed(3);
+    if (map.dataset.zoomed !== zoomed) map.dataset.zoomed = zoomed;
+    if (map.dataset.zoom !== scale) map.dataset.zoom = scale;
     map.classList.toggle('is-navigating', moving);
     if (moving) moveMapAnnotations(map, current);
     else updateMapAnnotations(map, current, getActiveLocation());
@@ -103,7 +118,7 @@ export function createMapNavigation(getMap, getActiveLocation = () => null, onFi
     if (!gestureMap) { gestureMap = map; inverse = map.getScreenCTM()?.inverse(); }
     if (!gesture.begin(event.pointerId, pointInMap(map, event.clientX, event.clientY), target)) return;
     if (gesture.ids().length === 2) {
-      for (const id of gesture.ids()) map.setPointerCapture(id);
+      for (const id of gesture.ids()) if (!map.hasPointerCapture(id)) map.setPointerCapture(id);
       map.classList.add('is-dragging'); event.preventDefault();
     }
   });
@@ -111,7 +126,8 @@ export function createMapNavigation(getMap, getActiveLocation = () => null, onFi
     if (!gestureMap?.isConnected || !gesture.has(event.pointerId)) return;
     const next = gesture.update(event.pointerId, pointInMap(gestureMap, event.clientX, event.clientY));
     if (!next) return;
-    gestureMap.setPointerCapture(event.pointerId); gestureMap.classList.add('is-dragging');
+    if (!gestureMap.hasPointerCapture(event.pointerId)) gestureMap.setPointerCapture(event.pointerId);
+    gestureMap.classList.add('is-dragging');
     target = next; batch.push(next); event.preventDefault();
   }, { passive: false });
   function endGesture(event) {

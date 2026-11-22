@@ -1,11 +1,14 @@
 // Keep one persistent vector definition outside rerendered views. External SVG
 // <use> documents can be dropped by Chromium when their last instance is removed.
 let loaded;
-const compact = typeof matchMedia === 'function' && matchMedia('(max-width:700px), (pointer:coarse)').matches;
+const compact = typeof matchMedia === 'function' && matchMedia('(max-width:700px), (any-pointer:coarse)').matches;
+// Avoid rebuilding a vector coastline on every touch frame.
+export const usesTouchBasemap = compact;
 const geographyUrl = compact ? new URL('./assets/geography-compact.svg', import.meta.url) : new URL('./assets/geography.svg', import.meta.url);
 let prefix=geographyUrl.href+'#';
 export const geographyHref=id=>prefix+id;
 export function loadGeography(){
+ if (usesTouchBasemap) return Promise.resolve();
  return loaded??=fetch(geographyUrl).then(response=>{
   if(!response.ok)throw new Error('Geography HTTP '+response.status);
   return response.text();

@@ -358,3 +358,9 @@
 @media(prefers-reduced-motion:reduce) { .route-map stop,.route-map .selected-path,.geo-label text,.route-map .map-labels text { transition: none; } }
 /* Keep the portfolio illustration at the same geographic proportions. */
 .case-map { height: auto; aspect-ratio: 1000 / 610; }
+
+.touch-basemap .touch-map-dark,
+[data-theme="dark"] .touch-basemap .touch-map-light,
+.route-map[data-details="false"] .touch-map-detail { display: none; }
+[data-theme="dark"] .touch-basemap .touch-map-dark { display: inline; }
+[data-theme="dark"] .route-map[data-details="false"] .touch-map-detail { display: none; }

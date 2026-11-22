@@ -3,7 +3,7 @@ import {advisoryButton} from './corridor-advisory.mjs';
 import {DEPARTURE,rankRoutes,money,dateLabel,referenceRoute} from './model.mjs';
 import {routeGroups,priorityLabel,mapReference,columnSortState} from './planner-model.mjs';
 import {scenarioLabView} from './scenario-lab.mjs';
-import {mapLegend,mapRoutePicker} from './route-map.mjs?v=mobile-2';
+import {mapLegend,mapRoutePicker} from './route-map.mjs?v=tablet-1';
 import {journeyView} from './analysis-views.mjs';
 import {journeyPlayer} from './journey-preview.mjs?v=mobile-2';
 import {statusPill} from './planning-views.mjs';
