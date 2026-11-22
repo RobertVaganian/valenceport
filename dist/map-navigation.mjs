@@ -150,7 +150,11 @@ export function createMapNavigation(getMap, getActiveLocation = () => null, onFi
   }
   document.addEventListener('pointerup', endGesture);
   document.addEventListener('pointercancel', event => { if (gesture.has(event.pointerId)) { suppressClickUntil = performance.now() + 250; cancelGesture(); paint(); } });
-  document.addEventListener('lostpointercapture', endGesture);
+  // Touch starts with implicit capture on the hit SVG child. Transferring it
+  // to the map fires a bubbling loss event from that child, mid-gesture.
+  document.addEventListener('lostpointercapture', event => {
+    if (event.target === gestureMap) endGesture(event);
+  });
   window.addEventListener('blur', () => { cancelGesture(); stop(); target = { ...current }; paint(); });
   document.addEventListener('visibilitychange', () => { if (document.hidden) { cancelGesture(); stop(); target = { ...current }; } });
   document.addEventListener('click', event => {

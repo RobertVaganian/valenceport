@@ -36,7 +36,7 @@ import {mapReference,nextTableSort} from "./planner-model.mjs";
 import {createJourneyPreview,journeyPlayer} from "./journey-preview.mjs?v=mobile-2";
 import { captureMotion, playMotion } from "./motion.mjs?v=mobile-2";
 import { syncWorkspaceLayout } from "./workspace-layout.mjs";
-import { createMapNavigation } from "./map-navigation.mjs?v=tablet-1";
+import { createMapNavigation } from "./map-navigation.mjs?v=map-touch";
 import { routeMap } from "./route-map.mjs?v=tablet-1";
 import { routeLocations } from "./map-layout.mjs?v=mobile-1";
 import { geometryId } from "./route-geometry.mjs";

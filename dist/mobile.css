@@ -95,7 +95,6 @@
     background:none; border-color:var(--selection); color:var(--text);
   }
   .map-stage:has(>.route-map:not(.motion-ghost)) { height:285px; min-height:285px; aspect-ratio:auto; }
-  .map-stage>.route-map { touch-action:pan-y; }
   .map-overlay-actions {
     top:9px; right:9px; flex-direction:row; gap:0; padding:0;
     background:var(--panel); border:1px solid var(--line); border-radius:11px;
@@ -417,9 +416,6 @@
 
 /* The map owns its gestures; the surrounding planner retains page scrolling. */
 .map-stage > .route-map { touch-action:none; }
-@media (max-width:700px), (pointer:coarse) {
-  .planner-grid:not(.map-wide) .route-map:not([data-zoomed="true"]) { touch-action:pan-y; }
-}
 .map-touch-hint { display:none; }
 .route-map.is-navigating .geographic-annotations { opacity:0; transition:none; }
 .route-map.is-navigating .route-reveal-mask { stroke-width:28; }
